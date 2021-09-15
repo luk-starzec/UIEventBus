@@ -1,0 +1,13 @@
+﻿.shop__wrapper {
+    background-color: lavender;
+}
+
+.shop__items-list {
+    list-style: none
+}
+
+.shop__item {
+    display: flex;
+    gap: 1rem;
+    margin: .5rem 1rem;
+}

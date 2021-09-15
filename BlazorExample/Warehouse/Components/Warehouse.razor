@@ -1,0 +1,62 @@
+﻿@inject IWarehouseService service
+
+<div class="warehouse__wrapper">
+
+    <h3>Warehouse</h3>
+
+    @if (items is null)
+    {
+        <div>
+            Loading...
+        </div>
+    }
+    else
+    {
+        <ul class="warehouse__items-list">
+
+            @foreach (var item in items)
+            {
+                <li class="warehouse__item">
+
+                    <div>
+                        @item.Id
+                    </div>
+
+                    <div>
+                        @item.Name
+                    </div>
+
+                    <div>
+                        @item.Quantity
+                    </div>
+
+                    <button disabled="@removeDisabled(item.Quantity)" @onclick="()=>RemoveProduct(item)">-</button>
+                    <button disabled="@addDisabled(item.Quantity)" @onclick="()=>AddProduct(item)">+</button>
+                </li>
+            }
+        </ul>
+    }
+
+</div>
+
+
+@code {
+    List<WarehouseModel> items;
+
+    bool addDisabled(int quantity) => quantity >= 10;
+    bool removeDisabled(int quantity) => quantity <= 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        items = (await service.GetItemsAsync()).ToList();
+    }
+
+    void RemoveProduct(WarehouseModel item)
+    {
+        item.Quantity--;
+    }
+    void AddProduct(WarehouseModel item)
+    {
+        item.Quantity++;
+    }
+}

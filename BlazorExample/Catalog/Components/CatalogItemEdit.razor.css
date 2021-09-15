@@ -1,0 +1,42 @@
+﻿
+.catalog-row__cell--id {
+    text-align: center;
+}
+
+.catalog-row__cell--options {
+    max-width: 1em;
+    text-align: center;
+}
+
+
+.catalog-item__options-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .25em;
+}
+
+.catalog-item-options__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid lightgray;
+    background-color: transparent;
+    color: dimgrey;
+    width: 2em;
+    height: 2em;
+    border-radius: .25em;
+}
+
+    .catalog-item-options__button:hover {
+        background-color: floralwhite;
+    }
+
+.catalog-item-options__button--active {
+    background-color: blanchedalmond;
+    color: black;
+}
+
+.catalog-item-options__button--inactive {
+    color: lightgray;
+}

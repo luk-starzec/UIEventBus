@@ -1,0 +1,36 @@
+﻿@inject ComponentEventBus bus
+
+<td class="catalog-row__cell--id">
+    @Item.Id
+</td>
+
+<td>
+    @Item.Name
+</td>
+
+<td>
+    @Item.Description
+</td>
+
+<td class="catalog-row__cell--options">
+
+    <div class="catalog-item__options-wrapper">
+
+        <button class="catalog-item-options__button catalog-item-options__button--active" @onclick="ConfirmEdit" title="Save changes">
+            <span class="oi oi-check"></span>
+        </button>
+        <button class="catalog-item-options__button" @onclick="CancelEdit" title="Cancel">
+            <span class="oi oi-x"></span>
+        </button>
+
+    </div>
+
+</td>
+
+@code {
+    [Parameter] public CatalogModel Item { get; set; }
+
+    async Task ConfirmEdit() => await bus.Publish(new CatalogItemEndEditEvent(Item.Id, false));
+    async Task CancelEdit() => await bus.Publish(new CatalogItemEndEditEvent(Item.Id, true));
+
+}

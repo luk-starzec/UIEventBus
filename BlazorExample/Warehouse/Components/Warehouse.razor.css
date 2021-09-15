@@ -1,0 +1,21 @@
+﻿.warehouse__wrapper {
+    background-color: azure;
+    padding: 1em;
+}
+
+h3 {
+    text-align: center;
+    color: steelblue;
+    margin-bottom: .5em;
+}
+
+
+.warehouse__items-list {
+    list-style: none
+}
+
+.warehouse__item {
+    display: flex;
+    gap: 1rem;
+    margin: .5rem 1rem;
+}

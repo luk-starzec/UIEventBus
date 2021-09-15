@@ -1,0 +1,61 @@
+﻿@inject ComponentEventBus bus
+@inject ICatalogService service
+
+<div class="catalog__wrapper">
+
+    <h3>Catalog</h3>
+
+    @if (items is null)
+    {
+        <div>Loading...</div>
+    }
+    else
+    {
+        <table class="catalog__table">
+
+            <thead>
+                <tr>
+                    <th class="catalog__item-header--id">Id</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th class="catalog__item-header--options">Options</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in items)
+                {
+                    <CatalogRow Item="@item" />
+                }
+            </tbody>
+
+        </table>
+
+    }
+
+</div>
+
+@code {
+    List<CatalogModel> items;
+
+    protected override async Task OnInitializedAsync()
+    {
+        items = (await service.GetItemsAsync()).ToList();
+
+        bus.Subscribe<CatalogItemEndDeleteEvent>(CatalogItemEndDeleteHandler);
+    }
+
+    void CatalogItemEndDeleteHandler(IComponentEvent @event)
+    {
+        var e = @event as CatalogItemEndDeleteEvent;
+
+        if (e.Canceled)
+            return;
+
+        var item = items.Single(r => r.Id == e.Id);
+        items.Remove(item);
+        StateHasChanged();
+
+        Task.Run(async () => await bus.Publish(new CatalogRemovedEvent(e.Id)));
+    }
+}

@@ -1,0 +1,24 @@
+﻿tr {
+    background-color: lavenderblush;
+}
+
+td {
+    padding: .5em;
+    text-align: center;
+    border: 1px solid darksalmon;
+}
+
+span {
+    margin-right: 2em;
+}
+
+button {
+    border: solid 1px lightgray;
+    border-radius: .25em;
+    background-color: white;
+    padding: .25em 1em;
+}
+
+    button:hover {
+        background-color: whitesmoke;
+    }

@@ -1,0 +1,51 @@
+﻿@inject ComponentEventBus bus
+
+<td class="catalog-row__cell--id">
+    @Item.Id
+</td>
+
+<td>
+    @Item.Name
+</td>
+
+<td>
+    @Item.Description
+</td>
+
+<td class="catalog-row__cell--options">
+
+    <div class="catalog-item__options-wrapper">
+
+        <button class="catalog-item-options__button @cssForSale" @onclick="ForSaleChange" title="@titleForSale">
+            <span class="oi oi-cart"></span>
+        </button>
+
+        <button class="catalog-item-options__button" @onclick="BeginEdit" title="Edit item">
+            <span class="oi oi-pencil"></span>
+        </button>
+
+        <button class="catalog-item-options__button" @onclick="BeginDelete" title="Delete item">
+            <span class="oi oi-circle-x"></span>
+        </button>
+
+    </div>
+
+</td>
+
+@code {
+    [Parameter] public CatalogModel Item { get; set; }
+
+    string cssForSale => Item.ForSale ? "catalog-item-options__button--active" : "catalog-item-options__button--inactive";
+    string titleForSale => Item.ForSale ? "Disable sale" : "Enable sale";
+
+
+    async Task ForSaleChange()
+    {
+        Item.ForSale = !Item.ForSale;
+        await bus.Publish(new CatalogForSaleChangedEvent(Item.Id, Item.ForSale));
+    }
+
+    async Task BeginEdit() => await bus.Publish(new CatalogItemBeginEditEvent(Item.Id));
+    async Task BeginDelete() => await bus.Publish(new CatalogItemBeginDeleteEvent(Item.Id));
+
+}

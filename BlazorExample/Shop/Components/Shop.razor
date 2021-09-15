@@ -1,0 +1,92 @@
+﻿@inject ComponentEventBus bus
+@inject IShopService service
+
+<div class="shop__wrapper">
+
+    <h3>Shop</h3>
+
+    @if (items is null)
+    {
+        <div>
+            Loading...
+        </div>
+    }
+    else
+    {
+        <ul class="shop__items-list">
+
+            @foreach (var item in items)
+            {
+                <li class="shop__item">
+
+                    <div>
+                        @item.Id
+                    </div>
+
+                    <div>
+                        @item.Name
+                    </div>
+
+                    <div>
+                        @item.Price
+                    </div>
+
+                    <button disabled="@(!item.Available)" @onclick="() => Buy(item)">Buy</button>
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+@code {
+    List<ShopModel> items;
+
+    protected override async Task OnInitializedAsync()
+    {
+        items = (await service.GetItemsAsync()).ToList();
+
+        bus.Subscribe<CatalogForSaleChangedEvent>(CatalogForSaleChangedHandler);
+        bus.Subscribe<CatalogAddedEvent>(CatalogAddedHandler);
+        bus.Subscribe<CatalogRemovedEvent>(CatalogRemovedHandler);
+    }
+
+    void Buy(ShopModel item)
+    {
+
+    }
+
+    void CatalogForSaleChangedHandler(IComponentEvent @event)
+    {
+        var item = @event as CatalogForSaleChangedEvent;
+
+        SetProductAvailability(item.Id, item.ForSale);
+    }
+
+    void CatalogRemovedHandler(IComponentEvent @event)
+    {
+        var deleted = @event as CatalogRemovedEvent;
+
+        var item = items.FirstOrDefault(r => r.Id == deleted.Id);
+        if (item is null)
+            return;
+
+        items.Remove(item);
+        StateHasChanged();
+    }
+
+    void CatalogAddedHandler(IComponentEvent @event)
+    {
+        var item = @event as CatalogAddedEvent;
+
+    }
+
+    void SetProductAvailability(int id, bool available)
+    {
+        var item = items.FirstOrDefault(r => r.Id == id);
+        if (item is null)
+            return;
+
+        item.Available = available;
+        StateHasChanged();
+    }
+}

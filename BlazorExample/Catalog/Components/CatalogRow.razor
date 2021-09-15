@@ -1,0 +1,86 @@
+﻿@inject ComponentEventBus bus
+
+<tr>
+    @if (editVisible)
+    {
+        <CatalogItemEdit Item="@Item" />
+    }
+    else
+    {
+        <CatalogItemPreview Item="@Item" />
+    }
+</tr>
+
+@if (deleteVisible)
+{
+    <DeleteConfirmRow Id="@Item.Id" Name="@Item.Name" />
+}
+
+
+@code {
+    [Parameter] public CatalogModel Item { get; set; }
+
+    bool editVisible = false;
+    bool deleteVisible = false;
+
+
+    protected override void OnInitialized()
+    {
+        bus.Subscribe<CatalogItemBeginEditEvent>(CatalogItemBeginEditHandler);
+        bus.Subscribe<CatalogItemEndEditEvent>(CatalogItemEndEditHandler);
+        bus.Subscribe<CatalogItemBeginDeleteEvent>(CatalogItemBeginDeleteHandler);
+        bus.Subscribe<CatalogItemEndDeleteEvent>(CatalogItemEndDeleteHandler);
+    }
+
+    void CatalogItemBeginEditHandler(IComponentEvent @event)
+    {
+        var item = @event as CatalogItemBeginEditEvent;
+
+        SetDeleteVisible(false);
+        SetEditVisible(item.Id == Item.Id);
+    }
+
+    void CatalogItemEndEditHandler(IComponentEvent @event)
+    {
+        var item = @event as CatalogItemEndEditEvent;
+
+        if (item.Id == Item.Id)
+            SetEditVisible(false);
+    }
+
+    void CatalogItemBeginDeleteHandler(IComponentEvent @event)
+    {
+        var item = @event as CatalogItemBeginDeleteEvent;
+
+        SetEditVisible(false);
+        SetDeleteVisible(item.Id == Item.Id);
+    }
+
+    void CatalogItemEndDeleteHandler(IComponentEvent @event)
+    {
+        var item = @event as CatalogItemEndDeleteEvent;
+
+        //if (item.Id == Item.Id)
+        SetDeleteVisible(false);
+    }
+
+
+    void SetEditVisible(bool visible)
+    {
+        var prev = editVisible;
+        editVisible = visible;
+
+        if (prev != editVisible)
+            StateHasChanged();
+    }
+
+    void SetDeleteVisible(bool visible)
+    {
+        var prev = deleteVisible;
+        deleteVisible = visible;
+
+        if (prev != deleteVisible)
+            StateHasChanged();
+    }
+
+}

@@ -1,0 +1,28 @@
+﻿@inject ComponentEventBus bus
+
+<tr>
+
+    <td colspan="@Colspan">
+
+        <span>
+            Delete item <b>@Name</b> (id @Id)?
+        </span>
+
+        <button @onclick="Confirm">Yes</button>
+
+        <button @onclick="Cancel">No</button>
+
+    </td>
+
+</tr>
+
+@code {
+    [Parameter] public int Colspan { get; set; } = 5;
+
+    [Parameter] public int Id { get; set; }
+    [Parameter] public string Name { get; set; }
+
+    async Task Confirm() => await bus.Publish(new CatalogItemEndDeleteEvent(Id, false));
+    async Task Cancel() => await bus.Publish(new CatalogItemEndDeleteEvent(Id, true));
+
+}
