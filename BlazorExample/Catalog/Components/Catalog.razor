@@ -1,5 +1,6 @@
 ﻿@inject ComponentEventBus bus
 @inject ICatalogService service
+@implements IDisposable
 
 <div class="catalog__wrapper">
 
@@ -45,7 +46,12 @@
         bus.Subscribe<CatalogItemEndDeleteEvent>(CatalogItemEndDeleteHandler);
     }
 
-    void CatalogItemEndDeleteHandler(IComponentEvent @event)
+    void IDisposable.Dispose()
+    {
+        bus.Unsubscribe(CatalogItemEndDeleteHandler);
+    }
+
+    async Task CatalogItemEndDeleteHandler(IComponentEvent @event)
     {
         var e = @event as CatalogItemEndDeleteEvent;
 
@@ -56,6 +62,6 @@
         items.Remove(item);
         StateHasChanged();
 
-        Task.Run(async () => await bus.Publish(new CatalogRemovedEvent(e.Id)));
+        await bus.Publish(new CatalogRemovedEvent(e.Id));
     }
 }

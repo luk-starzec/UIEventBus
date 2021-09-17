@@ -1,4 +1,6 @@
 ﻿@inject IWarehouseService service
+@inject ComponentEventBus bus
+@implements IDisposable
 
 <div class="warehouse__wrapper">
 
@@ -49,7 +51,15 @@
     protected override async Task OnInitializedAsync()
     {
         items = (await service.GetItemsAsync()).ToList();
+
+        bus.Subscribe<CatalogRemovedEvent>(CatalogRemovedHandler);
     }
+
+    void IDisposable.Dispose()
+    {
+        bus.Unsubscribe(CatalogRemovedHandler);
+    }
+
 
     void RemoveProduct(WarehouseModel item)
     {
@@ -59,4 +69,17 @@
     {
         item.Quantity++;
     }
+
+    void CatalogRemovedHandler(IComponentEvent @event)
+    {
+        var deleted = @event as CatalogRemovedEvent;
+
+        var item = items.FirstOrDefault(r => r.Id == deleted.Id);
+        if (item is null)
+            return;
+
+        items.Remove(item);
+        StateHasChanged();
+    }
+
 }

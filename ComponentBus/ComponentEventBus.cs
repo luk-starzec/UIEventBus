@@ -7,28 +7,68 @@ namespace ComponentBus
 {
     public class ComponentEventBus
     {
-        private readonly List<KeyValuePair<Type, Action<IComponentEvent>>> registered
-            = new List<KeyValuePair<Type, Action<IComponentEvent>>>();
+        private readonly List<(Type type, object handler)> registered
+            = new List<(Type type, object handler)>();
 
-        public void Subscribe<T>(Action<IComponentEvent> eventHandler)
+        public void Subscribe<T>(Action<T> eventHandler) where T : IComponentEvent
+            => Add<T>(eventHandler);
+        public void Subscribe<T>(Func<T, Task> eventHandler) where T : IComponentEvent
+            => Add<T>(eventHandler);
+
+        public void Unsubscribe(Action<IComponentEvent> eventHandler)
+            => Remove(eventHandler);
+        public void Unsubscribe(Func<IComponentEvent, Task> eventHandler)
+            => Remove(eventHandler);
+
+        public async Task Publish<T>(T componentEvent) where T : IComponentEvent
+            => await Invoke<T>(componentEvent);
+
+        //public void Clear()
+        //{
+        //    registered.Clear();
+        //}
+
+        private void Add<T>(Delegate eventHandler)
         {
             if (eventHandler is null)
                 return;
 
-            registered.Add(new KeyValuePair<Type, Action<IComponentEvent>>(typeof(T), eventHandler));
+            registered.Add((typeof(T), eventHandler));
         }
 
-        public async Task Publish<T>(T componentEvent) where T : IComponentEvent
+
+        private void Remove<T>(T eventHandler) where T : Delegate
         {
-            if (componentEvent == null)
+            if (eventHandler is null)
+                return;
+
+            var items = registered
+                .Where(r => r.handler as T == eventHandler)
+                .ToArray();
+
+            foreach (var item in items)
+                registered.Remove(item);
+        }
+
+        private async Task Invoke<T>(T componentEvent) where T : IComponentEvent
+        {
+            if (componentEvent is null)
                 return;
 
             var eventType = typeof(T);
-            var subscribers = registered.Where(r => r.Key == eventType).ToArray();
 
-            foreach (var subscriber in subscribers)
-                await Task.Run(() => subscriber.Value.Invoke(componentEvent));
+            var handlers = registered
+                .Where(r => r.type == eventType)
+                .Select(r => r.handler)
+                .ToArray();
+
+            foreach (var handler in handlers)
+            {
+                if (handler is Action<T> action)
+                    await Task.Run(() => action.Invoke(componentEvent));
+                if (handler is Func<T, Task> func)
+                    await func.Invoke(componentEvent);
+            }
         }
-
     }
 }

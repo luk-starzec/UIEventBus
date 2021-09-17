@@ -1,16 +1,38 @@
 ﻿@page "/counter"
 
-<h1>Counter</h1>
+    @inject ComponentEventBus bus
+    @implements IDisposable
 
-<p>Current count: @currentCount</p>
+    <h1>Counter</h1>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+    <p>Current count: @currentCount</p>
 
-@code {
-    private int currentCount = 0;
+    <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
-    private void IncrementCount()
-    {
-        currentCount++;
+    @code {
+        private int currentCount = 0;
+
+        protected override void OnInitialized()
+        {
+            //bus.Clear();
+            bus.Subscribe<TestEvent>(TestHandler);
+        }
+
+
+        void IDisposable.Dispose()
+        {
+            bus.Unsubscribe(TestHandler);
+        }
+
+        private async Task IncrementCount()
+        {
+            currentCount++;
+            await bus.Publish(new TestEvent(currentCount));
+        }
+
+        void TestHandler(IComponentEvent e)
+        {
+            var test = e as TestEvent;
+            Console.WriteLine("Test: " + test.Id.ToString());
+        }
     }
-}

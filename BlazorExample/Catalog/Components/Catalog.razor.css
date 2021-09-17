@@ -1,11 +1,11 @@
 ﻿.catalog__wrapper {
-    background-color: cornsilk;
+    background-color: hsl(48,100%,95%);
     padding: 1em;
 }
 
 h3 {
     text-align: center;
-    color: darkgoldenrod;
+    color: hsl(40,100%,30%);
     margin-bottom: .5em;
 }
 
@@ -35,6 +35,10 @@ th {
 .catalog__item-header--id,
 .catalog__item-header--options {
     text-align: center;
+}
+
+.catalog__item-header--options {
+    width: 7em;
 }
 
 td {

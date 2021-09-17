@@ -1,11 +1,17 @@
 ﻿
+td {
+    height: 4em;
+    border-block: 1px solid #FAEDD1;
+}
+
 .catalog-row__cell--id {
     text-align: center;
 }
 
-.catalog-row__cell--options {
-    max-width: 1em;
-    text-align: center;
+input {
+    width: 100%;
+    border: none;
+    padding: 0.25em;
 }
 
 
@@ -21,22 +27,17 @@
     justify-content: center;
     align-items: center;
     border: 1px solid lightgray;
-    background-color: transparent;
+    background-color: white;
     color: dimgrey;
-    width: 2em;
+    width: 3em;
     height: 2em;
     border-radius: .25em;
 }
 
     .catalog-item-options__button:hover {
-        background-color: floralwhite;
+        background-color: whitesmoke;
     }
 
 .catalog-item-options__button--active {
-    background-color: blanchedalmond;
     color: black;
-}
-
-.catalog-item-options__button--inactive {
-    color: lightgray;
 }

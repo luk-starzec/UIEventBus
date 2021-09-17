@@ -1,11 +1,11 @@
 ﻿tr {
-    background-color: lavenderblush;
+    background-color: hsl(339,100%,97%);
 }
 
 td {
     padding: .5em;
     text-align: center;
-    border: 1px solid darksalmon;
+    border-bottom: 1px solid darksalmon;
 }
 
 span {

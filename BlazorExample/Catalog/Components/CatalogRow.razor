@@ -1,6 +1,7 @@
 ﻿@inject ComponentEventBus bus
+@implements IDisposable
 
-<tr>
+<tr class="@cssRow">
     @if (editVisible)
     {
         <CatalogItemEdit Item="@Item" />
@@ -23,6 +24,9 @@
     bool editVisible = false;
     bool deleteVisible = false;
 
+    string cssRow => editVisible
+        ? "catalog-row__row--edit"
+        : deleteVisible ? "catalog-row__row--delete" : "";
 
     protected override void OnInitialized()
     {
@@ -30,6 +34,15 @@
         bus.Subscribe<CatalogItemEndEditEvent>(CatalogItemEndEditHandler);
         bus.Subscribe<CatalogItemBeginDeleteEvent>(CatalogItemBeginDeleteHandler);
         bus.Subscribe<CatalogItemEndDeleteEvent>(CatalogItemEndDeleteHandler);
+    }
+
+
+    void IDisposable.Dispose()
+    {
+        bus.Unsubscribe(CatalogItemBeginEditHandler);
+        bus.Unsubscribe(CatalogItemEndEditHandler);
+        bus.Unsubscribe(CatalogItemBeginDeleteHandler);
+        bus.Unsubscribe(CatalogItemEndDeleteHandler);
     }
 
     void CatalogItemBeginEditHandler(IComponentEvent @event)

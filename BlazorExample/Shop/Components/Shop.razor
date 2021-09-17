@@ -1,5 +1,6 @@
 ﻿@inject ComponentEventBus bus
 @inject IShopService service
+@implements IDisposable
 
 <div class="shop__wrapper">
 
@@ -48,6 +49,13 @@
         bus.Subscribe<CatalogForSaleChangedEvent>(CatalogForSaleChangedHandler);
         bus.Subscribe<CatalogAddedEvent>(CatalogAddedHandler);
         bus.Subscribe<CatalogRemovedEvent>(CatalogRemovedHandler);
+    }
+
+    void IDisposable.Dispose()
+    {
+        bus.Unsubscribe(CatalogForSaleChangedHandler);
+        bus.Unsubscribe(CatalogAddedHandler);
+        bus.Unsubscribe(CatalogRemovedHandler);
     }
 
     void Buy(ShopModel item)

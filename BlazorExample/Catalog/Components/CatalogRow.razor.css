@@ -1,4 +1,8 @@
-﻿td {
-    border-top: 1px solid gray;
-    padding: .25em .5em;
+﻿.catalog-row__row--edit {
+    background-color: hsl(40,100%,95%);
+}
+
+.catalog-row__row--delete {
+    background-color: hsl(339,100%,99%);
+    border-top: 1px solid darksalmon;
 }
