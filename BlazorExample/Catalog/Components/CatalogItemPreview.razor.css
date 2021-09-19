@@ -1,5 +1,10 @@
 ﻿
-.catalog-row__cell--id {
+td {
+    border-top: 1px solid lightgray;
+    padding: .25em .5em;
+}
+
+.catalog-item__cell--id {
     text-align: center;
 }
 

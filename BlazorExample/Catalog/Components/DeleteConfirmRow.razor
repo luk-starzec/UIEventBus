@@ -22,7 +22,7 @@
     [Parameter] public int Id { get; set; }
     [Parameter] public string Name { get; set; }
 
-    async Task Confirm() => await bus.Publish(new CatalogItemEndDeleteEvent(Id, false));
-    async Task Cancel() => await bus.Publish(new CatalogItemEndDeleteEvent(Id, true));
+    async Task Confirm() => await bus.Publish(new CatalogDeleteEndEvent(Id, false));
+    async Task Cancel() => await bus.Publish(new CatalogDeleteEndEvent(Id, true));
 
 }

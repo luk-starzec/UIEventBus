@@ -1,7 +1,19 @@
 ﻿@page "/"
 
+@inject ComponentEventBus bus
+@implements IDisposable
+
 <Catalog />
 
 <Warehouse />
 
 <Shop />
+
+<Report />
+
+@code{
+    void IDisposable.Dispose()
+    {
+        bus.UnsubscribeAll();
+    }
+}

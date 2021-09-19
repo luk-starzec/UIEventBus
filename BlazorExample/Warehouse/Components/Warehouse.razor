@@ -14,29 +14,32 @@
     }
     else
     {
-        <ul class="warehouse__items-list">
+        <table class="warehouse__table">
 
-            @foreach (var item in items)
-            {
-                <li class="warehouse__item">
+            <thead>
+                <tr>
+                    <th class="warehouse__item-header--id">
+                        Id
+                    </th>
 
-                    <div>
-                        @item.Id
-                    </div>
+                    <th>
+                        Name
+                    </th>
 
-                    <div>
-                        @item.Name
-                    </div>
+                    <th class="warehouse__item-header--quantity">
+                        Quantity
+                    </th>
+                </tr>
+            </thead>
 
-                    <div>
-                        @item.Quantity
-                    </div>
+            <tbody>
+                @foreach (var item in items)
+                {
+                    <WarehouseRow Item="@item" />
+                }
+            </tbody>
 
-                    <button disabled="@removeDisabled(item.Quantity)" @onclick="()=>RemoveProduct(item)">-</button>
-                    <button disabled="@addDisabled(item.Quantity)" @onclick="()=>AddProduct(item)">+</button>
-                </li>
-            }
-        </ul>
+        </table>
     }
 
 </div>
@@ -44,9 +47,6 @@
 
 @code {
     List<WarehouseModel> items;
-
-    bool addDisabled(int quantity) => quantity >= 10;
-    bool removeDisabled(int quantity) => quantity <= 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -61,20 +61,11 @@
     }
 
 
-    void RemoveProduct(WarehouseModel item)
-    {
-        item.Quantity--;
-    }
-    void AddProduct(WarehouseModel item)
-    {
-        item.Quantity++;
-    }
-
     void CatalogRemovedHandler(IComponentEvent @event)
     {
-        var deleted = @event as CatalogRemovedEvent;
+        var msg = @event as CatalogRemovedEvent;
 
-        var item = items.FirstOrDefault(r => r.Id == deleted.Id);
+        var item = FindItem(msg.Id);
         if (item is null)
             return;
 
@@ -82,4 +73,5 @@
         StateHasChanged();
     }
 
+    WarehouseModel FindItem(int id) => items.FirstOrDefault(r => r.Id == id);
 }

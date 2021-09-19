@@ -19,14 +19,11 @@ namespace ComponentBus
             => Remove(eventHandler);
         public void Unsubscribe(Func<IComponentEvent, Task> eventHandler)
             => Remove(eventHandler);
+        public void UnsubscribeAll() => registered.Clear();
 
         public async Task Publish<T>(T componentEvent) where T : IComponentEvent
             => await Invoke<T>(componentEvent);
 
-        //public void Clear()
-        //{
-        //    registered.Clear();
-        //}
 
         private void Add<T>(Delegate eventHandler)
         {

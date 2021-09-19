@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace BlazorExample.Catalog.Events
 {
-    public record CatalogItemEndDeleteEvent(int Id, bool Canceled) : IComponentEvent;
+    public record CatalogEditEndEvent(int Id, bool Canceled) : IComponentEvent, ICancelableComponentEvent;
 }

@@ -1,0 +1,71 @@
+﻿@inject ComponentEventBus bus
+@implements IDisposable
+
+<tr>
+    <td class="warehouse-row__item--id">
+        @Item.Id
+    </td>
+
+    <td>
+        @Item.Name
+    </td>
+
+    <td>
+        <div class="warehouse-row__quantity-wrapper">
+
+            <span>
+                @Item.Quantity
+            </span>
+
+            <button class="warehouse-row__button warehouse-row__button--left" disabled="@minusDisabled" @onclick="Decrease">
+                <span class="oi oi-minus"></span>
+            </button>
+            <button class="warehouse-row__button warehouse-row__button--right" disabled="@plusDisabled" @onclick="Increase">
+                <span class="oi oi-plus"></span>
+            </button>
+
+        </div>
+
+    </td>
+
+</tr>
+
+@code {
+    [Parameter] public WarehouseModel Item { get; set; }
+
+    bool plusDisabled => Item.Quantity >= 10;
+    bool minusDisabled => Item.Quantity <= 0;
+
+    protected override void OnInitialized()
+    {
+        bus.Subscribe<ShopSoldEvent>(ShopSoldHandler);
+    }
+
+    void IDisposable.Dispose()
+    {
+        bus.Unsubscribe(ShopSoldHandler);
+    }
+
+    async Task Decrease()
+    {
+        Item.Quantity--;
+        await bus.Publish<WarehouseQuantityChangedEvent>(new WarehouseQuantityChangedEvent(Item.Id, Item.Quantity));
+    }
+
+    async Task Increase()
+    {
+        Item.Quantity++;
+        await bus.Publish<WarehouseQuantityChangedEvent>(new WarehouseQuantityChangedEvent(Item.Id, Item.Quantity));
+    }
+
+    async Task ShopSoldHandler(IComponentEvent @event)
+    {
+        var msg = @event as ShopSoldEvent;
+        if (Item.Id != msg.Id)
+            return;
+
+        await Decrease();
+        StateHasChanged();
+    }
+
+}

@@ -1,0 +1,50 @@
+﻿@inject ComponentEventBus bus
+@inject IEventParser parser
+
+<h3>Report</h3>
+
+<table>
+
+    <thead>
+        <tr>
+            <th>Time</th>
+            <th>Event</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in items)
+        {
+            <tr>
+                <td>@item.Time</td>
+                <td>@item.Description</td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+@code {
+    List<ReportModel> items = new List<ReportModel>();
+
+    protected override void OnInitialized()
+    {
+        bus.Subscribe<CatalogAddedEvent>(ComponentBusEventHandler);
+        bus.Subscribe<CatalogForSaleChangedEvent>(ComponentBusEventHandler);
+        bus.Subscribe<CatalogEditBeginEvent>(ComponentBusEventHandler);
+        bus.Subscribe<CatalogDeleteBeginEvent>(ComponentBusEventHandler);
+        bus.Subscribe<CatalogEditEndEvent>(ComponentBusEventHandler);
+        bus.Subscribe<CatalogDeleteEndEvent>(ComponentBusEventHandler);
+    }
+
+    void ComponentBusEventHandler(IComponentEvent @event)
+    {
+        var item = parser.EventToReport(@event);
+
+        if (item is null)
+            return;
+
+        items.Add(item);
+        StateHasChanged();
+    }
+}

@@ -1,4 +1,5 @@
 using BlazorExample.Catalog;
+using BlazorExample.Report;
 using BlazorExample.Shop;
 using BlazorExample.Warehouse;
 using ComponentBus;
@@ -28,6 +29,8 @@ namespace BlazorExample
             builder.Services.AddTransient<ICatalogService, CatalogService>();
             builder.Services.AddTransient<IShopService, ShopService>();
             builder.Services.AddTransient<IWarehouseService, WarehouseService>();
+
+            builder.Services.AddTransient<IEventParser, EventParser>();
 
             await builder.Build().RunAsync();
         }

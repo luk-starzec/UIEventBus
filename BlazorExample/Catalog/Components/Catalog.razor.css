@@ -9,21 +9,10 @@ h3 {
     margin-bottom: .5em;
 }
 
-
 .catalog__table {
     table-layout: auto;
     width: 100%;
     border-collapse: collapse;
-}
-
-.catalog__items-list {
-    list-style: none
-}
-
-.catalog__item {
-    display: flex;
-    gap: 1rem;
-    margin: .5rem 1rem;
 }
 
 th {
@@ -32,57 +21,12 @@ th {
     color: darkslategray;
 }
 
-.catalog__item-header--id,
-.catalog__item-header--options {
+.catalog__item-header--id {
+    width: 3em;
     text-align: center;
 }
 
 .catalog__item-header--options {
     width: 7em;
-}
-
-td {
-    border-top: 1px solid gray;
-    padding: .25em .5em;
-}
-
-.catalog__item-cell--edit {
-    max-width: 1em;
     text-align: center;
-}
-
-.catalog__item-options-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: .25em;
-}
-
-.catalog__item-cell--id {
-    text-align: center;
-}
-
-.catalog__button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid lightgray;
-    background-color: transparent;
-    color: dimgrey;
-    width: 2em;
-    height: 2em;
-    border-radius: .25em;
-}
-
-    .catalog__button:hover {
-        background-color: floralwhite;
-    }
-
-.catalog__button--active {
-    background-color: blanchedalmond;
-    color: black;
-}
-
-.catalog__button--inactive {
-    color: lightgray;
 }

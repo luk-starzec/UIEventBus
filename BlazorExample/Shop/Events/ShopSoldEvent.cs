@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BlazorExample.Catalog.Events
+namespace BlazorExample.Shop.Events
 {
-    public record CatalogItemBeginDeleteEvent(int Id) : IComponentEvent;
+    public record ShopSoldEvent(int Id) : IComponentEvent;
 }

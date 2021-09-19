@@ -30,48 +30,48 @@
 
     protected override void OnInitialized()
     {
-        bus.Subscribe<CatalogItemBeginEditEvent>(CatalogItemBeginEditHandler);
-        bus.Subscribe<CatalogItemEndEditEvent>(CatalogItemEndEditHandler);
-        bus.Subscribe<CatalogItemBeginDeleteEvent>(CatalogItemBeginDeleteHandler);
-        bus.Subscribe<CatalogItemEndDeleteEvent>(CatalogItemEndDeleteHandler);
+        bus.Subscribe<CatalogEditBeginEvent>(CatalogEditBeginHandler);
+        bus.Subscribe<CatalogEditEndEvent>(CatalogEditEndHandler);
+        bus.Subscribe<CatalogDeleteBeginEvent>(CatalogDeleteBeginHandler);
+        bus.Subscribe<CatalogDeleteEndEvent>(CatalogDeleteEndHandler);
     }
 
 
     void IDisposable.Dispose()
     {
-        bus.Unsubscribe(CatalogItemBeginEditHandler);
-        bus.Unsubscribe(CatalogItemEndEditHandler);
-        bus.Unsubscribe(CatalogItemBeginDeleteHandler);
-        bus.Unsubscribe(CatalogItemEndDeleteHandler);
+        bus.Unsubscribe(CatalogEditBeginHandler);
+        bus.Unsubscribe(CatalogEditEndHandler);
+        bus.Unsubscribe(CatalogDeleteBeginHandler);
+        bus.Unsubscribe(CatalogDeleteEndHandler);
     }
 
-    void CatalogItemBeginEditHandler(IComponentEvent @event)
+    void CatalogEditBeginHandler(IComponentEvent @event)
     {
-        var item = @event as CatalogItemBeginEditEvent;
+        var item = @event as CatalogEditBeginEvent;
 
         SetDeleteVisible(false);
         SetEditVisible(item.Id == Item.Id);
     }
 
-    void CatalogItemEndEditHandler(IComponentEvent @event)
+    void CatalogEditEndHandler(IComponentEvent @event)
     {
-        var item = @event as CatalogItemEndEditEvent;
+        var item = @event as CatalogEditEndEvent;
 
         if (item.Id == Item.Id)
             SetEditVisible(false);
     }
 
-    void CatalogItemBeginDeleteHandler(IComponentEvent @event)
+    void CatalogDeleteBeginHandler(IComponentEvent @event)
     {
-        var item = @event as CatalogItemBeginDeleteEvent;
+        var item = @event as CatalogDeleteBeginEvent;
 
         SetEditVisible(false);
         SetDeleteVisible(item.Id == Item.Id);
     }
 
-    void CatalogItemEndDeleteHandler(IComponentEvent @event)
+    void CatalogDeleteEndHandler(IComponentEvent @event)
     {
-        var item = @event as CatalogItemEndDeleteEvent;
+        var item = @event as CatalogDeleteEndEvent;
 
         //if (item.Id == Item.Id)
         SetDeleteVisible(false);

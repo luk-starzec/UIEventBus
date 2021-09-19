@@ -58,9 +58,9 @@
         bus.Unsubscribe(CatalogRemovedHandler);
     }
 
-    void Buy(ShopModel item)
+    async Task Buy(ShopModel item)
     {
-
+        await bus.Publish<ShopSoldEvent>(new ShopSoldEvent(item.Id));
     }
 
     void CatalogForSaleChangedHandler(IComponentEvent @event)

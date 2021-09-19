@@ -1,4 +1,9 @@
-﻿.catalog-row__row--edit {
+﻿
+tr:not(.catalog-row__row--edit, .catalog-row__row--delete):hover {
+    background-color: hsl(48,90%,92%);
+}
+
+.catalog-row__row--edit {
     background-color: hsl(40,100%,95%);
 }
 

@@ -1,6 +1,6 @@
 ﻿@inject ComponentEventBus bus
 
-<td class="catalog-row__cell--id">
+<td class="catalog-item__cell--id">
     @Item.Id
 </td>
 
@@ -45,7 +45,7 @@
         await bus.Publish(new CatalogForSaleChangedEvent(Item.Id, Item.ForSale));
     }
 
-    async Task BeginEdit() => await bus.Publish(new CatalogItemBeginEditEvent(Item.Id));
-    async Task BeginDelete() => await bus.Publish(new CatalogItemBeginDeleteEvent(Item.Id));
+    async Task BeginEdit() => await bus.Publish(new CatalogEditBeginEvent(Item.Id));
+    async Task BeginDelete() => await bus.Publish(new CatalogDeleteBeginEvent(Item.Id));
 
 }
