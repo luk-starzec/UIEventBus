@@ -9,16 +9,20 @@ namespace BlazorExample.Shop
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Category { get; set; }
+        public string Color { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-        public bool Available { get; set; }
+        public bool ForSale { get; set; }
+        public int Quantity { get; set; }
+
+        public bool Available => ForSale && Quantity > 0;
 
         public ShopModel(int id, string name)
         {
             Id = id;
             Name = name;
             Price = 100;
-            Available = true;
         }
     }
 }

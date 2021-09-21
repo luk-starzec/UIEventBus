@@ -18,21 +18,8 @@
 
             @foreach (var item in items)
             {
-                <li class="shop__item">
-
-                    <div>
-                        @item.Id
-                    </div>
-
-                    <div>
-                        @item.Name
-                    </div>
-
-                    <div>
-                        @item.Price
-                    </div>
-
-                    <button disabled="@(!item.Available)" @onclick="() => Buy(item)">Buy</button>
+                <li>
+                    <ShopCard Item="@item" />
                 </li>
             }
         </ul>
@@ -47,6 +34,7 @@
         items = (await service.GetItemsAsync()).ToList();
 
         bus.Subscribe<CatalogForSaleChangedEvent>(CatalogForSaleChangedHandler);
+        bus.Subscribe<WarehouseQuantityChangedEvent>(WarehouseQuantityChangedHandler);
         bus.Subscribe<CatalogAddedEvent>(CatalogAddedHandler);
         bus.Subscribe<CatalogRemovedEvent>(CatalogRemovedHandler);
     }
@@ -54,20 +42,23 @@
     void IDisposable.Dispose()
     {
         bus.Unsubscribe(CatalogForSaleChangedHandler);
+        bus.Unsubscribe(WarehouseQuantityChangedHandler);
         bus.Unsubscribe(CatalogAddedHandler);
         bus.Unsubscribe(CatalogRemovedHandler);
-    }
-
-    async Task Buy(ShopModel item)
-    {
-        await bus.Publish<ShopSoldEvent>(new ShopSoldEvent(item.Id));
     }
 
     void CatalogForSaleChangedHandler(IComponentEvent @event)
     {
         var item = @event as CatalogForSaleChangedEvent;
 
-        SetProductAvailability(item.Id, item.ForSale);
+        SetForSale(item.Id, item.ForSale);
+    }
+
+    void WarehouseQuantityChangedHandler(IComponentEvent @event)
+    {
+        var item = @event as WarehouseQuantityChangedEvent;
+
+        SetQuantity(item.Id, item.Quantity);
     }
 
     void CatalogRemovedHandler(IComponentEvent @event)
@@ -88,13 +79,23 @@
 
     }
 
-    void SetProductAvailability(int id, bool available)
+    void SetForSale(int id, bool forSale)
     {
         var item = items.FirstOrDefault(r => r.Id == id);
         if (item is null)
             return;
 
-        item.Available = available;
+        item.ForSale = forSale;
+        StateHasChanged();
+    }
+
+    void SetQuantity(int id, int quantity)
+    {
+        var item = items.FirstOrDefault(r => r.Id == id);
+        if (item is null)
+            return;
+
+        item.Quantity = quantity;
         StateHasChanged();
     }
 }

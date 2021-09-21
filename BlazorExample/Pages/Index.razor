@@ -3,13 +3,25 @@
 @inject ComponentEventBus bus
 @implements IDisposable
 
-<Catalog />
+<div class="index__wrapper">
 
-<Warehouse />
+    <div class="index__catalog">
+        <Catalog />
+    </div>
 
-<Shop />
+    <div class="index__warehouse">
+        <Warehouse />
+    </div>
 
-<Report />
+    <div class="index__shop">
+        <Shop />
+    </div>
+
+    <div class="index__report">
+        <Report />
+    </div>
+
+</div>
 
 @code{
     void IDisposable.Dispose()

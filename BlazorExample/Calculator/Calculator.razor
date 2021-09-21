@@ -1,0 +1,50 @@
+﻿@page "/calculator"
+@inject ComponentEventBus bus
+
+<h3>Calculator</h3>
+
+<div class="calculator__wrapper">
+
+    <InputList />
+
+    <ResultList />
+
+    <SummaryList />
+
+</div>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var inputs = new List<(Guid id, string name)>
+            {
+                (Guid.NewGuid(), "A"),
+                (Guid.NewGuid(), "B"),
+            };
+
+            await bus.Publish<InputAddEvent>(new(inputs[0].id, inputs[0].name));
+            await bus.Publish<InputAddEvent>(new(inputs[1].id, inputs[1].name));
+
+            var results = new List<ResultModel>
+            {
+                new()
+                {
+                    Id=Guid.NewGuid(),
+                    Operation = OperationEnum.Add,
+                    Parameters=inputs.Select(r => new ParameterModel { Id = r.id, Name = r.name }).ToList()
+                },
+                new()
+                {
+                    Id=Guid.NewGuid(),
+                    Operation = OperationEnum.Subtract,
+                    Parameters=inputs.Select(r => new ParameterModel { Id = r.id, Name = r.name }).ToList()
+                },
+            };
+
+            await bus.Publish(new ResultAddEvent(results[0]));
+            await bus.Publish(new ResultAddEvent(results[1]));
+        }
+    }
+}

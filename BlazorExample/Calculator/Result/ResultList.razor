@@ -1,0 +1,70 @@
+﻿@inject ComponentEventBus bus
+@implements IDisposable
+
+<div class="result-list__wrapper">
+
+    <h3>Results</h3>
+
+    <ul class="result-list__list">
+        @foreach (var item in items)
+        {
+            <ResultItem Model="@item" />
+        }
+    </ul>
+
+    <div class="result-list__add-wrapper">
+        <ResultAdd />
+    </div>
+
+    <button class="result-list__reset-style">
+        Reset styles
+    </button>
+
+</div>
+
+@code {
+    List<ResultModel> items = new List<ResultModel>();
+
+    protected override void OnInitialized()
+    {
+        bus.Subscribe<ResultAddEvent>(ResultAddHandler);
+        bus.Subscribe<ResultRemoveEvent>(ResultRemoveHandler);
+    }
+    void IDisposable.Dispose()
+    {
+        bus.Unsubscribe(ResultAddHandler);
+        bus.Unsubscribe(ResultRemoveHandler);
+    }
+
+    void ResultAddHandler(IComponentEvent @event)
+    {
+        var msg = @event as ResultAddEvent;
+
+        items.Add(new()
+        {
+            Id = msg.Id,
+            Operation = (OperationEnum)msg.OperationId,
+            Parameters = msg.Parameters.ToList(),
+        });
+        StateHasChanged();
+    }
+
+    void ResultRemoveHandler(IComponentEvent @event)
+    {
+        var msg = @event as ResultRemoveEvent;
+
+        var item = items.FirstOrDefault(r => r.Id == msg.Id);
+        if (item is null)
+            return;
+
+        items.Remove(item);
+        StateHasChanged();
+    }
+
+    async Task ResetStyle()
+    {
+        foreach (var item in items)
+            await bus.Publish<ResultStyleResetEvent>(new(item.Id));
+    }
+
+}

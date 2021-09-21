@@ -65,13 +65,11 @@
     {
         var msg = @event as CatalogRemovedEvent;
 
-        var item = FindItem(msg.Id);
+        var item = items.FirstOrDefault(r => r.Id == msg.Id);
         if (item is null)
             return;
 
         items.Remove(item);
         StateHasChanged();
     }
-
-    WarehouseModel FindItem(int id) => items.FirstOrDefault(r => r.Id == id);
 }

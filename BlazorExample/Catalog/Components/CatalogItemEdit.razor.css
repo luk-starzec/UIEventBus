@@ -4,14 +4,30 @@ td {
     border-block: 1px solid #FAEDD1;
 }
 
-.catalog-item__cell--id {
+.catalog-item__cell--id,
+.catalog-item__cell--color {
     text-align: center;
 }
 
 input {
     width: 100%;
     border: none;
-    padding: 0.25em;
+    padding: 0.25em 0.5em;
+}
+
+    input[type=color] {
+        width: 3.5em;
+        height: 2.5em;
+        padding: 0;
+        background-color: hsl(40,100%,95%);
+        cursor: pointer;
+    }
+
+select {
+    width: 100%;
+    height: 2em;
+    border: none;
+    padding: 0.25em 0.5em;
 }
 
 

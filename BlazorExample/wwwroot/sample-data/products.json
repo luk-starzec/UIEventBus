@@ -1,38 +1,45 @@
 [
   {
     "id": 1,
-    "name": "First",
+    "name": "First 1",
     "description": "This is first product",
+    "categoryId": 0,
+    "category": "T-shirt",
+    "color": "red",
     "forSale": true,
     "price": 15,
-    "available": true,
     "quantity": 5
   },
   {
     "id": 2,
     "name": "Second",
     "description": "Second product",
+    "categoryId": 1,
+    "category": "Shirt",
+    "color": "blue",
     "forSale": false,
     "price": 23,
-    "available": false,
     "quantity": 7
   },
   {
     "id": 3,
     "name": "Third",
     "description": "Lorem ipsum",
+    "categoryId": 1,
+    "category": "Shirt",
+    "color": "#00FFFF",
     "forSale": true,
     "price": 8,
-    "available": false,
     "quantity": 0
   },
   {
     "id": 4,
     "name": "Fourth",
     "description": "Lorem ipsum",
+    "categoryId": 1,
+    "category": "Shirt",
     "forSale": true,
     "price": 12,
-    "available": true,
     "quantity": 9
   }
 ]

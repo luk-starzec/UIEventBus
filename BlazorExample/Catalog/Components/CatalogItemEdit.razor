@@ -9,6 +9,19 @@
 </td>
 
 <td>
+    <select @bind="categoryId">
+        @foreach (var category in categories)
+        {
+            <option value="@category.Key">@category.Value</option>
+        }
+    </select>
+</td>
+
+<td class="catalog-item__cell--color">
+    <input type="color" @bind="@color" title="Select color" />
+</td>
+
+<td>
     <input @bind-value="description" />
 </td>
 
@@ -16,10 +29,11 @@
 
     <div class="catalog-item__options-wrapper">
 
-        <button class="catalog-item-options__button catalog-item-options__button--active" @onclick="ConfirmEdit" title="Save changes">
+        <button class="catalog-item-options__button catalog-item-options__button--active" @onclick="Confirm" title="Save changes">
             <span class="oi oi-check"></span>
         </button>
-        <button class="catalog-item-options__button" @onclick="CancelEdit" title="Cancel">
+
+        <button class="catalog-item-options__button" @onclick="Cancel" title="Cancel">
             <span class="oi oi-x"></span>
         </button>
 
@@ -30,22 +44,38 @@
 @code {
     [Parameter] public CatalogModel Item { get; set; }
 
+    Dictionary<int, string> categories;
+
     string name;
+    int categoryId;
+    string color;
     string description;
+
+    protected override void OnInitialized()
+    {
+        categories = Enum.GetValues(typeof(CatalogCategoryEnum))
+            .Cast<CatalogCategoryEnum>()
+            .ToDictionary(k => (int)k, v => v.GetDescription());
+    }
 
     protected override void OnParametersSet()
     {
         name = Item.Name;
         description = Item.Description;
+        categoryId = (int)Item.Category;
+        color = Item.Color;
     }
 
-    async Task ConfirmEdit()
+    async Task Confirm()
     {
         Item.Name = name;
+        Item.Category = (CatalogCategoryEnum)categoryId;
+        Item.Color = color;
         Item.Description = description;
 
         await bus.Publish(new CatalogEditEndEvent(Item.Id, false));
     }
-    async Task CancelEdit() => await bus.Publish(new CatalogEditEndEvent(Item.Id, true));
+
+    async Task Cancel() => await bus.Publish(new CatalogEditEndEvent(Item.Id, true));
 
 }

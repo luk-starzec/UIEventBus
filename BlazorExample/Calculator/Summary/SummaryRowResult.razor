@@ -1,0 +1,54 @@
+﻿@inject ComponentEventBus bus
+@implements IDisposable
+
+<tr>
+    <td>Result</td>
+    <td>@text</td>
+    <td></td>
+</tr>
+
+@code {
+    [Parameter] public SummaryResultModel Item { get; set; }
+
+    string inputs => Item?.Inputs?.Any() == true ? string.Join($" {Item.Operator} ", Item.Inputs.Values) : "";
+    string values => Item?.Values?.Any() == true ? string.Join($" {Item.Operator} ", Item.Values.Values) : "";
+    string result => Item.Result?.ToString() ?? "";
+
+    string text => $"{inputs} = {values} = {result}";
+
+
+    protected override void OnInitialized()
+    {
+        bus.Subscribe<InputValueChangeEvent>(InputValueChangeHandler);
+        bus.Subscribe<ResultValueChangeEvent>(ResultValueChangeHandler);
+    }
+    void IDisposable.Dispose()
+    {
+        bus.Unsubscribe(InputValueChangeHandler);
+        bus.Unsubscribe(ResultValueChangeHandler);
+    }
+
+
+    void ResultValueChangeHandler(IComponentEvent @event)
+    {
+        var msg = @event as ResultValueChangeEvent;
+
+        if (Item.Id != msg.Id)
+            return;
+
+        Item.Result = msg.Value;
+        StateHasChanged();
+    }
+
+    void InputValueChangeHandler(IComponentEvent @event)
+    {
+        var msg = @event as InputValueChangeEvent;
+
+        if (!Item.Values.ContainsKey(msg.Id))
+            return;
+
+        Item.Values[msg.Id] = msg.Value;
+        StateHasChanged();
+    }
+
+}

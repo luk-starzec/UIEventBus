@@ -1,0 +1,37 @@
+﻿@inject ComponentEventBus bus
+
+<div class="shop-card__wrapper">
+
+    <div class="shop-card__image">
+
+    </div>
+
+    <div class="shop-card__id">
+        #@Item.Id
+    </div>
+
+    <div class="shop-card__name">
+        @Item.Name
+    </div>
+
+    <div class="shop-card__category">
+        @Item.Category
+    </div>
+
+
+    <div class="shop-card__price">
+        $@Item.Price
+    </div>
+
+    <button class="shop-card__buy" disabled="@(!Item.Available)" @onclick="Buy">Buy</button>
+
+</div>
+
+@code {
+    [Parameter] public ShopModel Item { get; set; }
+
+
+    async Task Buy() => await bus.Publish<ShopSoldEvent>(new ShopSoldEvent(Item.Id));
+
+
+}

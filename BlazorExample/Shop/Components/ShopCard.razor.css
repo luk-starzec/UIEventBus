@@ -1,0 +1,37 @@
+﻿
+.shop-card__wrapper {
+    position: relative;
+    width: 10em;
+    height: 10em;
+    background-color: white;
+}
+
+.shop-card__image {
+    height: 60%;
+    background-color: hsl(200,10%,90%);
+}
+
+.shop-card__id {
+    color: hsl(200,10%,80%);
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.shop-card__name {
+    color: hsl(200,10%,25%);
+}
+
+.shop-card__category {
+    color: hsl(200,10%,70%);
+}
+
+.shop-card__price {
+    color: hsl(160,50%,50%);
+}
+
+.shop-card__buy {
+}
+
+.shop-card__id {
+}

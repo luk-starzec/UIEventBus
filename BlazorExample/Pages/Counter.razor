@@ -14,7 +14,7 @@
 
     protected override void OnInitialized()
     {
-        //bus.Clear();
+        bus.UnsubscribeAll();
         bus.Subscribe<TestEvent>(TestHandler);
     }
 
@@ -27,7 +27,7 @@
     private async Task IncrementCount()
     {
         currentCount++;
-        await bus.Publish(new TestEvent(currentCount));
+        await bus.Publish<TestEvent>(new(currentCount));
     }
 
     void TestHandler(IComponentEvent e)

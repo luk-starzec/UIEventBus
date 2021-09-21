@@ -4,8 +4,20 @@ td {
     padding: .25em .5em;
 }
 
-.catalog-item__cell--id {
+.catalog-item__cell--id,
+.catalog-item__cell--category {
     text-align: center;
+}
+
+.catalog-item__cell--color div {
+    display: flex;
+    justify-content: center;
+}
+
+.catalog-item__color {
+    width: 3em;
+    height: 2em;
+    border-radius: .25em;
 }
 
 .catalog-item__options-wrapper {

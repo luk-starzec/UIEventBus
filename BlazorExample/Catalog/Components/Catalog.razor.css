@@ -26,6 +26,16 @@ th {
     text-align: center;
 }
 
+.catalog__item-header--category {
+    width: 8em;
+    text-align: center;
+}
+
+.catalog__item-header--color {
+    width: 6em;
+    text-align: center;
+}
+
 .catalog__item-header--options {
     width: 7em;
     text-align: center;

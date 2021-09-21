@@ -1,0 +1,67 @@
+﻿@inject ComponentEventBus bus
+@implements IDisposable
+
+<div class="input-list__wrapper">
+
+    <h3>Parameters</h3>
+
+    <ul class="input-list__list">
+        @foreach (var item in items)
+        {
+            <InputItem Model="@item" />
+        }
+    </ul>
+
+    <div class="input-list__add-wrapper">
+        <InputAdd />
+    </div>
+
+    <button class="input-list__reset-style">
+        Reset styles
+    </button>
+</div>
+
+@code {
+    List<InputModel> items = new List<InputModel>();
+
+    protected override void OnInitialized()
+    {
+        bus.Subscribe<InputAddEvent>(InputAddHandler);
+        bus.Subscribe<InputRemoveEvent>(InputRemoveHandler);
+    }
+    void IDisposable.Dispose()
+    {
+        bus.Unsubscribe(InputAddHandler);
+        bus.Unsubscribe(InputRemoveHandler);
+    }
+
+    void InputAddHandler(IComponentEvent @event)
+    {
+        var msg = @event as InputAddEvent;
+        items.Add(new()
+        {
+            Id = msg.Id,
+            Name = msg.Name,
+        });
+        StateHasChanged();
+
+    }
+
+    void InputRemoveHandler(IComponentEvent @event)
+    {
+        var msg = @event as InputRemoveEvent;
+
+        var item = items.FirstOrDefault(r => r.Id == msg.Id);
+        if (item is null)
+            return;
+
+        items.Remove(item);
+        StateHasChanged();
+    }
+
+    async Task ResetStyle()
+    {
+        foreach (var item in items)
+            await bus.Publish(new InputStyleResetEvent(item.Id));
+    }
+}

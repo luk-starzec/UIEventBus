@@ -10,9 +10,9 @@ namespace ComponentBus
         private readonly List<(Type type, object handler)> registered
             = new List<(Type type, object handler)>();
 
-        public void Subscribe<T>(Action<T> eventHandler) where T : IComponentEvent
+        public void Subscribe<T>(Action<IComponentEvent> eventHandler) where T : IComponentEvent
             => Add<T>(eventHandler);
-        public void Subscribe<T>(Func<T, Task> eventHandler) where T : IComponentEvent
+        public void Subscribe<T>(Func<IComponentEvent, Task> eventHandler) where T : IComponentEvent
             => Add<T>(eventHandler);
 
         public void Unsubscribe(Action<IComponentEvent> eventHandler)
@@ -45,6 +45,7 @@ namespace ComponentBus
 
             foreach (var item in items)
                 registered.Remove(item);
+
         }
 
         private async Task Invoke<T>(T componentEvent) where T : IComponentEvent
