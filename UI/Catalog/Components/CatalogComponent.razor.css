@@ -1,0 +1,17 @@
+﻿.catalog__wrapper {
+    --hue: 40;
+    background-color: hsl(var(--hue),100%,95%);
+    padding: 1em;
+}
+
+h3 {
+    text-align: center;
+    color: hsl(var(--hue),100%,30%);
+    margin-bottom: .5em;
+}
+
+.catalog__table {
+    table-layout: auto;
+    width: 100%;
+    border-collapse: collapse;
+}

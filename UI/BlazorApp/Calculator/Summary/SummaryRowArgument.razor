@@ -1,0 +1,40 @@
+﻿@inject ComponentEventBus bus
+@implements IDisposable
+
+<tr>
+    <td>Argument</td>
+
+    <td>@text</td>
+
+    <td></td>
+</tr>
+
+@code {
+    [Parameter] public SummaryArgumentModel Item { get; set; }
+
+    string text => $"{Item.Name} = {Item.Value}";
+
+
+
+    protected override void OnInitialized()
+    {
+        bus.Subscribe<ArgumentValueChangeEvent>(ArgumentValueChangeHandler);
+    }
+    void IDisposable.Dispose()
+    {
+        bus.Unsubscribe(ArgumentValueChangeHandler);
+    }
+
+
+    void ArgumentValueChangeHandler(IComponentEvent @event)
+    {
+        var msg = @event as ArgumentValueChangeEvent;
+
+        if (Item.Id != msg.Id)
+            return;
+
+        Item.Value = msg.Value;
+        StateHasChanged();
+    }
+
+}

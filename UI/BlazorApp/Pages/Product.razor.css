@@ -1,0 +1,27 @@
+﻿.product__wrapper {
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+        "catalog catalog warehouse"
+        "shop shop shop"
+        "report report report";
+    gap: 1em;
+}
+
+.product__catalog {
+    grid-area: catalog;
+}
+
+.product__warehouse {
+    grid-area: warehouse;
+}
+
+.product__shop {
+    grid-area: shop;
+}
+
+.product__report {
+    grid-area: report;
+    min-height: 10vh;
+}

@@ -1,0 +1,33 @@
+﻿.warehouse__wrapper {
+    --hue: 200;
+    background-color: hsl(var(--hue),100%,97%);
+    padding: 1em;
+}
+
+h3 {
+    text-align: center;
+    color: hsl(var(--hue),100%,25%);
+    margin-bottom: .5em;
+}
+
+.warehouse__table {
+    table-layout: auto;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    border-bottom: 2px solid gray;
+    text-align: left;
+    color: darkslategray;
+}
+
+.warehouse__item-header--id {
+    width: 3em;
+    text-align: center
+}
+
+.warehouse__item-header--quantity {
+    width: 8em;
+    text-align: center;
+}

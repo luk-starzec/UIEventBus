@@ -1,0 +1,52 @@
+﻿
+tr:hover {
+    background-color: hsl(var(--hue),85%,95%);
+}
+
+td {
+    border-top: 1px solid lightgray;
+    padding: .5em;
+}
+
+.warehouse-row__item--id {
+    text-align: center;
+}
+
+.warehouse-row__quantity-wrapper {
+    display: flex;
+    width: 7em;
+}
+
+    .warehouse-row__quantity-wrapper span {
+        flex-grow: 1;
+        text-align: right;
+    }
+
+.warehouse-row__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid hsl(var(--hue),20%,80%);
+    background-color: hsl(var(--hue),70%,95%);
+    color: hsl(var(--hue),10%,40%);
+    font-size: .8em;
+}
+
+    .warehouse-row__button:hover {
+        background-color: hsl(var(--hue),100%,99%);
+        color: black;
+    }
+
+    .warehouse-row__button:disabled {
+        background-color: hsl(var(--hue),100%,99%);
+        color: hsl(var(--hue),20%,80%);
+    }
+
+.warehouse-row__button--left {
+    margin-left: 1em;
+    border-radius: .25em 0 0 .25em;
+}
+
+.warehouse-row__button--right {
+    border-radius: 0 .25em .25em 0;
+}

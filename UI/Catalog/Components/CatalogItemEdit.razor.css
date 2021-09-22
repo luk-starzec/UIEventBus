@@ -1,0 +1,59 @@
+﻿
+td {
+    height: 4em;
+    border-block: 1px solid #FAEDD1;
+}
+
+.catalog-item__cell--id,
+.catalog-item__cell--color {
+    text-align: center;
+}
+
+input {
+    width: 100%;
+    border: none;
+    padding: 0.25em 0.5em;
+}
+
+    input[type=color] {
+        width: 3.5em;
+        height: 2.5em;
+        padding: 0;
+        background-color: hsl(var(--hue),100%,90%);
+        cursor: pointer;
+    }
+
+select {
+    width: 100%;
+    height: 2em;
+    border: none;
+    padding: 0.25em 0.5em;
+}
+
+
+.catalog-item__options-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .25em;
+}
+
+.catalog-item-options__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid lightgray;
+    background-color: white;
+    color: dimgrey;
+    width: 3em;
+    height: 2em;
+    border-radius: .25em;
+}
+
+    .catalog-item-options__button:hover {
+        background-color: whitesmoke;
+    }
+
+.catalog-item-options__button--active {
+    color: black;
+}

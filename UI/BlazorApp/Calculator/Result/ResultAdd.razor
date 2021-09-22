@@ -1,0 +1,118 @@
+﻿@inject ComponentEventBus bus
+@implements IDisposable
+
+<div class="result-add__wrapper">
+
+    <label>
+        Operation:
+        <select @bind="operationId">
+            @foreach (var o in operations)
+            {
+                <option value="@o.Key">@o.Value</option>
+            }
+        </select>
+    </label>
+
+    Parameters:
+
+    @if (showParameters)
+    {
+        <div>
+            <button @onclick="ShowParametersChange">OK</button>
+
+            @foreach (var p in parameters)
+            {
+                <label>
+                    <input type="checkbox" checked="@IsSelectedParameter(p.Id)" value="@p.Id" @onclick="() => SelectedParameterChange(p.Id)" />
+                    @p.Name
+                </label>
+            }
+
+        </div>
+    }
+    else
+    {
+        <button @onclick="ShowParametersChange">Set</button>
+    }
+
+    <button @onclick="Add" disabled="@(!selectedParameters.Any())">
+        <span class="oi oi-plus"></span>
+        Add
+    </button>
+
+</div>
+
+@code {
+    Dictionary<int, string> operations;
+
+    int operationId = (int)OperationEnum.Add;
+
+    List<ParameterModel> parameters = new List<ParameterModel>();
+    List<Guid> selectedParameters = new List<Guid>();
+
+    bool showParameters;
+
+    protected override void OnInitialized()
+    {
+        operations = Enum.GetValues(typeof(OperationEnum))
+            .Cast<OperationEnum>()
+            .ToDictionary(k => (int)k, v => v.GetDescription());
+
+        bus.Subscribe<ArgumentAddEvent>(ArgumentAddHandler);
+        bus.Subscribe<ArgumentValueChangeEvent>(ArgumentValueChangeHandler);
+    }
+    void IDisposable.Dispose()
+    {
+        bus.Unsubscribe(ArgumentAddHandler);
+        bus.Unsubscribe(ArgumentValueChangeHandler);
+    }
+
+    void ArgumentAddHandler(IComponentEvent @event)
+    {
+        var msg = @event as ArgumentAddEvent;
+        parameters.Add(new() { Id = msg.Id, Name = msg.Name });
+        selectedParameters.Add(msg.Id);
+        StateHasChanged();
+    }
+
+    void ArgumentValueChangeHandler(IComponentEvent @event)
+    {
+        var msg = @event as ArgumentValueChangeEvent;
+
+        var parameter = parameters.FirstOrDefault(r => r.Id == msg.Id);
+        if (parameter is null)
+            return;
+
+        parameter.Value = msg.Value;
+        StateHasChanged();
+    }
+
+    async Task Add()
+    {
+        var model = new ResultModel
+        {
+            Id = Guid.NewGuid(),
+            Operation = (OperationEnum)operationId,
+            Parameters = parameters.Where(r => selectedParameters.Contains(r.Id)).ToList(),
+        };
+        await bus.Publish(new ResultAddEvent(model));
+    }
+
+    void ShowParametersChange()
+    {
+        showParameters = !showParameters;
+    }
+
+    void SelectedParameterChange(Guid id)
+    {
+        if (IsSelectedParameter(id))
+            selectedParameters.Remove(id);
+        else
+            selectedParameters.Add(id);
+    }
+
+    bool IsSelectedParameter(Guid id)
+    {
+        return selectedParameters.Any(r => r == id);
+    }
+}

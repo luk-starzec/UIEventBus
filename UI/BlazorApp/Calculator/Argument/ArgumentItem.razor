@@ -1,0 +1,66 @@
+﻿@inject ComponentEventBus bus
+@implements IDisposable
+
+<div class="argument-item__wrapper" style="background-color: @color">
+    <label>
+        @Model.Name:
+        <input type="number" value="@Model.Value" @onchange="OnChange" />
+    </label>
+
+    <button @onclick="OnRemove">
+        <span class="oi oi-x"></span>
+    </button>
+</div>
+
+@code {
+    [Parameter] public ArgumentModel Model { get; set; }
+
+    string color;
+    string defaultColor = "#FFFFAA";
+
+    protected override void OnInitialized()
+    {
+        color = defaultColor;
+
+        bus.Subscribe<ArgumentStyleResetEvent>(ArgumentStyleResetHandler);
+        bus.Subscribe<SummaryStyleChangeEvent>(SummaryStyleChangedHandler);
+    }
+
+    void IDisposable.Dispose()
+    {
+        bus.Unsubscribe(ArgumentStyleResetHandler);
+        bus.Unsubscribe(SummaryStyleChangedHandler);
+    }
+
+    async Task ArgumentStyleResetHandler(IComponentEvent @event)
+    {
+        var msg = @event as ArgumentStyleResetEvent;
+        if (msg.Id != Model.Id)
+            return;
+
+        color = defaultColor;
+        await bus.Publish(new ArgumentStyleChangeEvent(Model.Id, color));
+        StateHasChanged();
+    }
+
+    void SummaryStyleChangedHandler(IComponentEvent @event)
+    {
+        var msg = @event as SummaryStyleChangeEvent;
+        if (!msg.IsArgument || msg.Id != Model.Id)
+            return;
+
+        color = msg.Color;
+        StateHasChanged();
+    }
+
+    async Task OnChange(ChangeEventArgs e)
+    {
+        Model.Value = int.Parse(e.Value?.ToString());
+        await bus.Publish(new ArgumentValueChangeEvent(Model.Id, Model.Value));
+    }
+
+    async Task OnRemove()
+    {
+        await bus.Publish(new ArgumentRemoveEvent(Model.Id));
+    }
+}

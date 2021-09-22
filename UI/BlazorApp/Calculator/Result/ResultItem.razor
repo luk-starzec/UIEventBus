@@ -1,0 +1,108 @@
+﻿@inject ComponentEventBus bus
+@implements IDisposable
+
+<div class="@cssWrapper" style="background-color: @color">
+
+    @if (Model.Parameters.Any())
+    {
+        @result
+    }
+
+    @if (disabled)
+    {
+        <span class="result__disabled oi oi-ban" title="Parameter was removed"></span>
+    }
+
+    <button @onclick="OnRemove">
+        <span class="oi oi-x"></span>
+    </button>
+
+</div>
+
+@code {
+    [Parameter] public ResultModel Model { get; set; }
+
+    string leftSide => string.Join($" {Model.OperationText} ", Model.Parameters.Select(r => r.Name));
+    string rightSide => Model.Result?.ToString() ?? "---";
+    string result => $"{leftSide} = {rightSide}";
+
+    string color;
+    string defaultColor = "#FFFFFA";
+
+    bool disabled;
+
+    string cssWrapper => disabled ? "result__wrapper result__wrapper--disabled" : "result__wrapper";
+
+    protected override void OnInitialized()
+    {
+        color = defaultColor;
+
+        bus.Subscribe<ArgumentValueChangeEvent>(ArgumentValueChangeHandler);
+        bus.Subscribe<ArgumentRemoveEvent>(ArgumentRemoveHandler);
+        bus.Subscribe<ResultStyleResetEvent>(ResultStyleResetHandler);
+        bus.Subscribe<SummaryStyleChangeEvent>(SummaryStyleChangeHandler);
+    }
+
+    void IDisposable.Dispose()
+    {
+        bus.Unsubscribe(ArgumentValueChangeHandler);
+        bus.Unsubscribe(ArgumentRemoveHandler);
+        bus.Unsubscribe(ResultStyleResetHandler);
+        bus.Unsubscribe(SummaryStyleChangeHandler);
+    }
+
+    async Task ArgumentValueChangeHandler(IComponentEvent @event)
+    {
+        if (disabled)
+            return;
+
+        var msg = @event as ArgumentValueChangeEvent;
+
+        var param = Model.Parameters.FirstOrDefault(r => r.Id == msg.Id);
+        if (param is null)
+            return;
+
+        param.Value = msg.Value;
+        await bus.Publish(new ResultValueChangeEvent(Model.Id, Model.Result));
+        StateHasChanged();
+    }
+
+    void ArgumentRemoveHandler(IComponentEvent @event)
+    {
+        var msg = @event as ArgumentRemoveEvent;
+
+        var param = Model.Parameters.FirstOrDefault(r => r.Id == msg.Id);
+        if (param is null)
+            return;
+
+        disabled = true;
+        StateHasChanged();
+    }
+
+    async Task ResultStyleResetHandler(IComponentEvent @event)
+    {
+        var msg = @event as ResultStyleResetEvent;
+        if (msg.Id != Model.Id)
+            return;
+
+        color = defaultColor;
+        await bus.Publish(new ResultStyleChangeEvent(Model.Id, color));
+        StateHasChanged();
+    }
+
+    void SummaryStyleChangeHandler(IComponentEvent @event)
+    {
+        var msg = @event as SummaryStyleChangeEvent;
+        if (!msg.IsResult || msg.Id != Model.Id)
+            return;
+
+        color = msg.Color;
+        StateHasChanged();
+    }
+
+    async Task OnRemove()
+    {
+        await bus.Publish(new ResultRemoveEvent(Model.Id));
+    }
+
+}

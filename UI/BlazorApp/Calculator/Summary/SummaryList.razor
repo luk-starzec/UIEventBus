@@ -1,0 +1,102 @@
+﻿@inject ComponentEventBus bus
+@implements IDisposable
+
+<div class="summary-list__wrapper">
+
+    <div class="summary-list__list-wrapper">
+        <table>
+
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in argItems)
+                {
+                    <SummaryRowArgument Item="@item" />
+                }
+                @foreach (var item in resultItems)
+                {
+                    <SummaryRowResult Item="@item" />
+                }
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+@code {
+    List<SummaryArgumentModel> argItems = new List<SummaryArgumentModel>();
+    List<SummaryResultModel> resultItems = new List<SummaryResultModel>();
+
+    protected override void OnInitialized()
+    {
+        bus.Subscribe<ArgumentAddEvent>(ArgumentAddHandler);
+        bus.Subscribe<ArgumentRemoveEvent>(ArgumentRemoveHandler);
+        bus.Subscribe<ResultAddEvent>(ResultAddHandler);
+        bus.Subscribe<ResultRemoveEvent>(ResultRemoveHandler);
+    }
+    void IDisposable.Dispose()
+    {
+        bus.Unsubscribe(ArgumentAddHandler);
+        bus.Unsubscribe(ArgumentRemoveHandler);
+        bus.Unsubscribe(ResultAddHandler);
+        bus.Unsubscribe(ResultRemoveHandler);
+    }
+
+    void ArgumentAddHandler(IComponentEvent @event)
+    {
+        var msg = @event as ArgumentAddEvent;
+        argItems.Add(new()
+        {
+            Id = msg.Id,
+            Name = msg.Name,
+        });
+        StateHasChanged();
+    }
+
+    void ArgumentRemoveHandler(IComponentEvent @event)
+    {
+        var msg = @event as ArgumentRemoveEvent;
+
+        var item = argItems.FirstOrDefault(r => r.Id == msg.Id);
+        if (item is null)
+            return;
+
+        argItems.Remove(item);
+        StateHasChanged();
+    }
+
+    void ResultAddHandler(IComponentEvent @event)
+    {
+        var msg = @event as ResultAddEvent;
+
+        resultItems.Add(new()
+        {
+            Id = msg.Id,
+            Operator = msg.Operator,
+            Arguments = msg.Parameters.ToDictionary(k => k.Id, v => v.Name),
+            Values = msg.Parameters.ToDictionary(k => k.Id, v => v.Value),
+            Result = msg.Result,
+        });
+        StateHasChanged();
+    }
+
+    void ResultRemoveHandler(IComponentEvent @event)
+    {
+        var msg = @event as ResultRemoveEvent;
+
+        var item = resultItems.FirstOrDefault(r => r.Id == msg.Id);
+        if (item is null)
+            return;
+
+        resultItems.Remove(item);
+        StateHasChanged();
+    }
+
+}

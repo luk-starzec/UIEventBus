@@ -1,0 +1,67 @@
+﻿@inject ComponentEventBus bus
+@implements IDisposable
+
+<div class="argument-list__wrapper">
+
+    <h3>Arguments</h3>
+
+    <ul class="argument-list__list">
+        @foreach (var item in items)
+        {
+            <ArgumentItem Model="@item" />
+        }
+    </ul>
+
+    <div class="argument-list__add-wrapper">
+        <ArgumentAdd />
+    </div>
+
+    <button class="argument-list__reset-style">
+        Reset styles
+    </button>
+</div>
+
+@code {
+    List<ArgumentModel> items = new List<ArgumentModel>();
+
+    protected override void OnInitialized()
+    {
+        bus.Subscribe<ArgumentAddEvent>(ArgumentAddHandler);
+        bus.Subscribe<ArgumentRemoveEvent>(ArgumentRemoveHandler);
+    }
+    void IDisposable.Dispose()
+    {
+        bus.Unsubscribe(ArgumentAddHandler);
+        bus.Unsubscribe(ArgumentRemoveHandler);
+    }
+
+    void ArgumentAddHandler(IComponentEvent @event)
+    {
+        var msg = @event as ArgumentAddEvent;
+        items.Add(new()
+        {
+            Id = msg.Id,
+            Name = msg.Name,
+        });
+        StateHasChanged();
+
+    }
+
+    void ArgumentRemoveHandler(IComponentEvent @event)
+    {
+        var msg = @event as ArgumentRemoveEvent;
+
+        var item = items.FirstOrDefault(r => r.Id == msg.Id);
+        if (item is null)
+            return;
+
+        items.Remove(item);
+        StateHasChanged();
+    }
+
+    async Task ResetStyle()
+    {
+        foreach (var item in items)
+            await bus.Publish(new ArgumentStyleResetEvent(item.Id));
+    }
+}

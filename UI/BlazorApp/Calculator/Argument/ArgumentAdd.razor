@@ -1,0 +1,25 @@
+﻿@inject ComponentEventBus bus
+
+<div class="argument-add__wrapper">
+
+    <label>
+        Name:
+        <input @bind="name" @bind:event="oninput" />
+    </label>
+
+    <button disabled="@(string.IsNullOrWhiteSpace(name))" @onclick="Add">
+        <span class="oi oi-plus"></span>
+        Add
+    </button>
+
+</div>
+
+@code {
+    string name;
+
+    async Task Add()
+    {
+        await bus.Publish(new ArgumentAddEvent(Guid.NewGuid(), name));
+        name = string.Empty;
+    }
+}
