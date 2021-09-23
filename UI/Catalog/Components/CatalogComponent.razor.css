@@ -2,6 +2,7 @@
     --hue: 40;
     background-color: hsl(var(--hue),100%,95%);
     padding: 1em;
+    height: 100%;
 }
 
 h3 {
@@ -9,6 +10,26 @@ h3 {
     color: hsl(var(--hue),100%,30%);
     margin-bottom: .5em;
 }
+
+.catalog__table-wrapper {
+    position: relative;
+    height: calc(100% - 3em);
+    overflow: auto;
+}
+
+    .catalog__table-wrapper::-webkit-scrollbar {
+        width: .5em;
+    }
+
+    .catalog__table-wrapper::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 2px hsla(var(--hue),30%,30%, 0.3);
+        border-radius: .25em;
+    }
+
+    .catalog__table-wrapper::-webkit-scrollbar-thumb {
+        background-color: hsl(var(--hue),60%,70%);
+        border-radius: .25em;
+    }
 
 .catalog__table {
     table-layout: auto;

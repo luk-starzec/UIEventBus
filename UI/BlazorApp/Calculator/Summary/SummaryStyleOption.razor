@@ -1,0 +1,76 @@
+﻿@inject ComponentEventBus bus
+@implements IDisposable
+
+<div class="summary-style-option__wrapper">
+
+    <input class="summary-style-option__color" type="color" value="@color" @oninput="ColorChange" />
+
+</div>
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+    [Parameter]
+    public bool IsArgument
+    {
+        get => isArgument;
+        set
+        {
+            if (isArgument == value)
+                return;
+            isArgument = value;
+            color = ArgumentSettings.DefaultColor;
+        }
+    }
+    [Parameter] public bool IsResult
+    {
+        get => isResult;
+        set
+        {
+            if (isResult == value)
+                return;
+            isResult = value;
+            color = ResultSettings.DefaultColor;
+        }
+    }
+
+    bool isArgument;
+    bool isResult;
+    string color;
+
+    protected override void OnInitialized()
+    {
+        bus.Subscribe<ArgumentStyleResetEvent>(ArgumentStyleResetHandler);
+        bus.Subscribe<ResultStyleResetEvent>(ResultStyleResetHandler);
+    }
+    void IDisposable.Dispose()
+    {
+        bus.Unsubscribe(ArgumentStyleResetHandler);
+        bus.Unsubscribe(ResultStyleResetHandler);
+    }
+
+    void ArgumentStyleResetHandler(IComponentEvent @event)
+    {
+        var msg = @event as ArgumentStyleResetEvent;
+        if (msg.Id != Id)
+            return;
+
+        color = ArgumentSettings.DefaultColor;
+        StateHasChanged();
+    }
+
+    void ResultStyleResetHandler(IComponentEvent @event)
+    {
+        var msg = @event as ResultStyleResetEvent;
+        if (msg.Id != Id)
+            return;
+
+        color = ResultSettings.DefaultColor;
+        StateHasChanged();
+    }
+
+    async Task ColorChange(ChangeEventArgs e)
+    {
+        color = e.Value.ToString();
+        await bus.Publish(new SummaryStyleChangeEvent(Id, color, IsArgument, IsResult));
+    }
+}

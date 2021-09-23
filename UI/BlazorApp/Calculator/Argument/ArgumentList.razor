@@ -5,18 +5,18 @@
 
     <h3>Arguments</h3>
 
-    <ul class="argument-list__list">
+    <div class="argument-list__items">
         @foreach (var item in items)
         {
             <ArgumentItem Model="@item" />
         }
-    </ul>
+    </div>
 
     <div class="argument-list__add-wrapper">
         <ArgumentAdd />
     </div>
 
-    <button class="argument-list__reset-style">
+    <button class="argument-list__reset-style" @onclick="ResetStyle">
         Reset styles
     </button>
 </div>

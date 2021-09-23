@@ -1,0 +1,48 @@
+﻿.report-list__wrapper {
+    position: relative;
+    overflow: auto;
+}
+
+    .report-list__wrapper::-webkit-scrollbar {
+        width: .5em;
+    }
+
+    .report-list__wrapper::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 2px hsla(var(--hue),30%,30%, 0.3);
+        border-radius: .25em;
+    }
+
+    .report-list__wrapper::-webkit-scrollbar-thumb {
+        background-color: hsl(var(--hue),60%,70%);
+        border-radius: .25em;
+    }
+
+table {
+    table-layout: auto;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead tr {
+    position: sticky;
+    top: 0;
+    background-color: hsl(var(--hue),100%,90%);
+    color: hsl(var(--hue),100%,20%);
+    border-bottom: 1px solid hsl(var(--hue),30%,80%);
+    z-index: 1;
+}
+
+th {
+    padding-block: .25em;
+    text-align: left;
+}
+
+.report-list__header--time {
+    width: 12em;
+    text-align: center;
+}
+
+.report-list__item--time {
+    text-align: center;
+    color: gray;
+}

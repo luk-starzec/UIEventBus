@@ -1,12 +1,14 @@
 ﻿.product__wrapper {
     height: 100%;
     display: grid;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: 30% calc(50% - 2em) 20%;
+    grid-template-columns: 1fr 30%;
     grid-template-areas:
-        "catalog catalog warehouse"
-        "shop shop shop"
-        "report report report";
+        "catalog warehouse"
+        "shop shop"
+        "report report";
     gap: 1em;
+    padding-block: 1em;
 }
 
 .product__catalog {

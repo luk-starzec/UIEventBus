@@ -1,0 +1,31 @@
+﻿@inject HttpClient Http
+
+<div class="shop-item-image__wrapper" style="fill: @Color;">
+    @svg
+</div>
+
+@code {
+    [Parameter] public string Category { get; set; }
+    [Parameter] public string Color { get; set; }
+
+    MarkupString svg;
+
+    protected override async Task OnInitializedAsync() => svg = await GetSvg();
+    protected override async Task OnParametersSetAsync() => svg = await GetSvg();
+
+    async Task<MarkupString> GetSvg()
+    {
+        string url = GetUrl();
+
+        try
+        {
+            return new MarkupString(await Http.GetStringAsync(url));
+        }
+        catch (Exception)
+        {
+            return new MarkupString();
+        }
+    }
+
+    string GetUrl() => $"_content/shop/assets/{Category.Replace(" ", "-").ToLower()}.svg";
+}

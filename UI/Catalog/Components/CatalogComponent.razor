@@ -12,21 +12,24 @@
     }
     else
     {
-        <table class="catalog__table">
+        <div class="catalog__table-wrapper">
 
-            <thead>
-                <CatalogHeaderRow />
-            </thead>
+            <table class="catalog__table">
 
-            <tbody>
-                @foreach (var item in items)
-                {
-                    <CatalogRow Item="@item" />
-                }
-            </tbody>
+                <thead>
+                    <CatalogHeaderRow />
+                </thead>
 
-        </table>
+                <tbody>
+                    @foreach (var item in items)
+                    {
+                        <CatalogRow Item="@item" />
+                    }
+                </tbody>
 
+            </table>
+
+        </div>
     }
 
 </div>

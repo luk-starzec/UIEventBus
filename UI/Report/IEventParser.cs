@@ -4,6 +4,7 @@ namespace Report
 {
     public interface IEventParser
     {
-        ReportModel EventToReport(IComponentEvent @event);
+        ReportLogModel EventToReportLog(IComponentEvent @event);
+        string GetEventSource(IComponentEvent @event);
     }
 }

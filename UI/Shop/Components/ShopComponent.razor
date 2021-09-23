@@ -75,8 +75,17 @@
 
     void CatalogAddedHandler(IComponentEvent @event)
     {
-        var item = @event as CatalogAddedEvent;
+        var msg = @event as CatalogAddedEvent;
 
+        var item = new ShopModel
+        {
+            Id = msg.Item.Id,
+            Name = msg.Item.Name,
+            Category = msg.Item.Category,
+            Color = msg.Item.Color,
+            Description = msg.Item.Description,
+        };
+        items.Add(item);
     }
 
     void SetForSale(int id, bool forSale)

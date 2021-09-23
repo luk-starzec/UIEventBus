@@ -28,7 +28,9 @@ namespace BlazorApp.Calculator.Result
                 OperationEnum.Add => Parameters.Sum(r => r.Value),
                 OperationEnum.Subtract => Parameters.Select(r => r.Value).Aggregate((a, b) => a - b),
                 OperationEnum.Multiply => Parameters.Select(r => r.Value).Aggregate((a, b) => a * b),
-                OperationEnum.Divide => Parameters.Skip(1).All(r => r.Value != 0) ? Parameters.Select(r => r.Value).Aggregate((a, b) => a / b) : null,
+                OperationEnum.Divide => Parameters.Skip(1).All(r => r.Value != 0)
+                    ? Math.Round(Parameters.Select(r => (decimal)r.Value).Aggregate((a, b) => a / b), 2)
+                    : null,
                 _ => null,
             };
         }

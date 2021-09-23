@@ -1,0 +1,22 @@
+﻿@inject ComponentEventBus bus
+
+<div class="wrapper">
+
+    <button class="button" @onclick="BeginEdit" title="Edit item">
+        <span class="oi oi-pencil"></span>
+    </button>
+
+    <button class="button" @onclick="BeginDelete" title="Delete item">
+        <span class="oi oi-trash"></span>
+    </button>
+
+</div>
+
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    async Task BeginEdit() => await bus.Publish(new CatalogEditBeginEvent(Id));
+    async Task BeginDelete() => await bus.Publish(new CatalogDeleteBeginEvent(Id));
+
+}

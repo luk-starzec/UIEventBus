@@ -1,7 +1,15 @@
-﻿th {
+﻿tr {
+    position: sticky;
+    top: 0;
+    background-color: hsl(var(--hue),100%,90%);
+    color: hsl(var(--hue),100%,20%);
     border-bottom: 2px solid gray;
+    z-index: 1;
+}
+
+th {
+    padding-block: .25em;
     text-align: left;
-    color: darkslategray;
 }
 
 .catalog-header-row__id {

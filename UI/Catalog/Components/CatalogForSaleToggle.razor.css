@@ -1,0 +1,32 @@
+﻿.wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2em;
+    height: 2em;
+    border-radius: .25em;
+    border: 1px solid lightgray;
+    background-color: hsl(var(--hue),100%,95%);
+    color: dimgrey;
+}
+
+    .button:hover {
+        background-color: floralwhite;
+        color: black;
+    }
+
+.button--active {
+    background-color: hsl(40,100%,90%);
+    color: black;
+    box-shadow: inset 2px 2px 2px rgba(0 0 0 / 0.15);
+}
+
+.button--inactive {
+    background-color: hsl(var(--hue),100%,95%);
+    color: gray;
+}

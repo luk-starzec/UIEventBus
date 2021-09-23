@@ -9,7 +9,14 @@ namespace Report
 {
     public class EventParser : IEventParser
     {
-        public ReportModel EventToReport(IComponentEvent @event)
+        List<string> eventSources = new()
+        {
+            "Catalog",
+            "Warehouse",
+            "Shop"
+        };
+
+        public ReportLogModel EventToReportLog(IComponentEvent @event)
         {
             if (@event is null)
                 return null;
@@ -19,7 +26,19 @@ namespace Report
             if (@event is ICancelableComponentEvent cancelable)
                 description = $"{description} ({(cancelable.Canceled ? "canceled" : "confirmed")})";
 
-            return new ReportModel(description);
+            return new ReportLogModel(description);
+        }
+
+        public string GetEventSource(IComponentEvent @event)
+        {
+            if (@event is null)
+                return null;
+
+            var name = @event.GetType().Name;
+            var source = eventSources.FirstOrDefault(r => name.ToLower().StartsWith(r.ToLower()));
+
+            return source ?? "Other";
         }
     }
+
 }

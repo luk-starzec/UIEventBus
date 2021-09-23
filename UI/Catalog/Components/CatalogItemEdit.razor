@@ -21,8 +21,12 @@
     <input type="color" @bind="@color" title="Select color" />
 </td>
 
-<td colspan="2">
+<td>
     <input @bind-value="description" />
+</td>
+
+<td>
+    <CatalogForSaleToggle Id="@Item.Id" ForSale="@Item.ForSale" />
 </td>
 
 <td>
@@ -74,6 +78,7 @@
         Item.Description = description;
 
         await bus.Publish(new CatalogEditEndEvent(Item.Id, false));
+        await bus.Publish(new CatalogChangedEvent(Item.Id, Item.Name, Item.Category.GetDescription(), Item.Color, Item.Description));
     }
 
     async Task Cancel() => await bus.Publish(new CatalogEditEndEvent(Item.Id, true));

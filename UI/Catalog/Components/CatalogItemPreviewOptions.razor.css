@@ -1,0 +1,24 @@
+﻿
+.wrapper {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: .25em;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid lightgray;
+    background-color: hsl(var(--hue),100%,95%);
+    color: dimgrey;
+    width: 2em;
+    height: 2em;
+    border-radius: .25em;
+}
+
+    .button:hover {
+        background-color: floralwhite;
+        color: black;
+    }

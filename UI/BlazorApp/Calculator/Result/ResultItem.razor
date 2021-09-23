@@ -5,12 +5,16 @@
 
     @if (Model.Parameters.Any())
     {
-        @result
+        <div class="result-item__result">
+            @result
+        </div>
     }
 
     @if (disabled)
     {
-        <span class="result__disabled oi oi-ban" title="Parameter was removed"></span>
+        <div class="result-item__disabled" title="Argument was removed">
+            <span class="oi oi-ban"></span>
+        </div>
     }
 
     <button @onclick="OnRemove">
@@ -27,11 +31,11 @@
     string result => $"{leftSide} = {rightSide}";
 
     string color;
-    string defaultColor = "#FFFFFA";
+    string defaultColor = ResultSettings.DefaultColor;
 
     bool disabled;
 
-    string cssWrapper => disabled ? "result__wrapper result__wrapper--disabled" : "result__wrapper";
+    string cssWrapper => disabled ? "result-item__wrapper result-item__wrapper--disabled" : "result-item__wrapper";
 
     protected override void OnInitialized()
     {

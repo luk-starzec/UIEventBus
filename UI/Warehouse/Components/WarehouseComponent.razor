@@ -14,32 +14,24 @@
     }
     else
     {
-        <table class="warehouse__table">
+        <div class="warehouse__table-wrapper">
 
-            <thead>
-                <tr>
-                    <th class="warehouse__item-header--id">
-                        Id
-                    </th>
+            <table class="warehouse__table">
 
-                    <th>
-                        Name
-                    </th>
+                <thead>
+                    <WarehouseHeaderRow />
+                </thead>
 
-                    <th class="warehouse__item-header--quantity">
-                        Quantity
-                    </th>
-                </tr>
-            </thead>
+                <tbody>
+                    @foreach (var item in items)
+                    {
+                        <WarehouseRow Item="@item" />
+                    }
+                </tbody>
 
-            <tbody>
-                @foreach (var item in items)
-                {
-                    <WarehouseRow Item="@item" />
-                }
-            </tbody>
+            </table>
 
-        </table>
+        </div>
     }
 
 </div>
@@ -53,11 +45,13 @@
         items = (await service.GetItemsAsync()).ToList();
 
         bus.Subscribe<CatalogRemovedEvent>(CatalogRemovedHandler);
+        bus.Subscribe<CatalogAddedEvent>(CatalogAddedHandler);
     }
 
     void IDisposable.Dispose()
     {
         bus.Unsubscribe(CatalogRemovedHandler);
+        bus.Unsubscribe(CatalogAddedHandler);
     }
 
 
@@ -72,4 +66,13 @@
         items.Remove(item);
         StateHasChanged();
     }
+
+
+    void CatalogAddedHandler(IComponentEvent @event)
+    {
+        var msg = @event as CatalogAddedEvent;
+
+        items.Add(new(msg.Item.Id, msg.Item.Name));
+    }
+
 }

@@ -1,0 +1,25 @@
+﻿@inject ComponentEventBus bus
+
+<div class="wrapper">
+
+    <button class="button @cssForSale" @onclick="ForSaleChange" title="@titleForSale">
+        <span class="oi @icoForSale"></span>
+    </button>
+
+</div>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    [Parameter] public bool ForSale { get; set; }
+
+    string icoForSale => ForSale ? "oi-cart" : "oi-ban";
+    string cssForSale => ForSale ? "button--active" : "button--inactive";
+    string titleForSale => ForSale ? "Enabled" : "Disabled";
+
+
+    async Task ForSaleChange()
+    {
+        ForSale = !ForSale;
+        await bus.Publish(new CatalogForSaleChangedEvent(Id, ForSale));
+    }
+}

@@ -23,46 +23,15 @@
     @Item.Description
 </td>
 
-<td class="catalog-item__cell--sales">
-    <div>
-        <button class="catalog-item-options__button @cssForSale" @onclick="ForSaleChange" title="@titleForSale">
-            <span class="oi @icoForSale"></span>
-        </button>
-    </div>
+<td>
+    <CatalogForSaleToggle Id="@Item.Id" ForSale="@Item.ForSale" />
 </td>
 
 <td>
-
-    <div class="catalog-item__options-wrapper">
-
-        <button class="catalog-item-options__button" @onclick="BeginEdit" title="Edit item">
-            <span class="oi oi-pencil"></span>
-        </button>
-
-        <button class="catalog-item-options__button" @onclick="BeginDelete" title="Delete item">
-            <span class="oi oi-trash"></span>
-        </button>
-
-    </div>
+    <CatalogItemPreviewOptions Id="@Item.Id" />
 
 </td>
 
 @code {
     [Parameter] public CatalogModel Item { get; set; }
-
-    string icoForSale => Item.ForSale ? "oi-cart" : "oi-ban";
-    string cssForSale => Item.ForSale ? "catalog-item-options__button--active" : "catalog-item-options__button--inactive";
-    string titleForSale => Item.ForSale ? "Enabled" : "Disabled";
-
-
-    async Task ForSaleChange()
-    {
-        Item.ForSale = !Item.ForSale;
-        await bus.Publish(new CatalogForSaleChangedEvent(Item.Id, Item.ForSale));
-    }
-
-    async Task BeginEdit() => await bus.Publish(new CatalogEditBeginEvent(Item.Id));
-
-    async Task BeginDelete() => await bus.Publish(new CatalogDeleteBeginEvent(Item.Id));
-
 }

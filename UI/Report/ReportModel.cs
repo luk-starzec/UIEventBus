@@ -2,12 +2,12 @@
 
 namespace Report
 {
-    public record ReportModel
+    public record ReportLogModel
     {
         public DateTime Time { get; init; }
         public string Description { get; init; }
 
-        public ReportModel(string description)
+        public ReportLogModel(string description)
         {
             Time = DateTime.Now;
             Description = description;

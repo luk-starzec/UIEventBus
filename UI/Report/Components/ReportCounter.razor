@@ -1,0 +1,60 @@
+﻿@inject ComponentEventBus bus
+@inject IEventSubscriber subscriber
+@inject IEventParser parser
+@implements IDisposable
+
+<div class="report-counter__wrapper">
+
+    <div class="report-counter__total">
+        Total: @total
+    </div>
+
+    <ul class="report-counter__list">
+        @foreach (var s in sources)
+        {
+            <li class="report-counter__list-item">
+                @s.Key: @s.Value
+            </li>
+        }
+    </ul>
+
+</div>
+
+@code {
+    int total;
+    Dictionary<string, int> sources = new Dictionary<string, int>();
+
+    protected override void OnInitialized()
+    {
+        subscriber.SubscribeAll(ComponentBusEventHandler);
+    }
+    void IDisposable.Dispose()
+    {
+        subscriber.UnsubscribeAll(ComponentBusEventHandler);
+    }
+
+    void ComponentBusEventHandler(IComponentEvent @event)
+    {
+        if (@event is null)
+            return;
+
+        IncreaseTotal();
+        IncreaseSources(@event);
+
+        StateHasChanged();
+    }
+
+    void IncreaseTotal() => total++;
+
+    void IncreaseSources(IComponentEvent @event)
+    {
+        var source = parser.GetEventSource(@event);
+
+        if (source is null)
+            return;
+        if (!sources.ContainsKey(source))
+            sources.Add(source, 0);
+
+        sources[source]++;
+    }
+}

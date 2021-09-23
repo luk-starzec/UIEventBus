@@ -7,7 +7,7 @@
         <input type="number" value="@Model.Value" @onchange="OnChange" />
     </label>
 
-    <button @onclick="OnRemove">
+    <button @onclick="OnRemove" title="Remove argument">
         <span class="oi oi-x"></span>
     </button>
 </div>
@@ -16,7 +16,7 @@
     [Parameter] public ArgumentModel Model { get; set; }
 
     string color;
-    string defaultColor = "#FFFFAA";
+    string defaultColor = ArgumentSettings.DefaultColor;
 
     protected override void OnInitialized()
     {

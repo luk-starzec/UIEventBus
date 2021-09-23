@@ -1,0 +1,26 @@
+﻿.report-counter__wrapper {
+    grid-row: 1/3;
+    grid-column: 2/3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1/1;
+    height: 100%;
+    background-color: hsl(var(--hue),100%,90%);
+}
+
+.report-counter__total {
+    text-align: center;
+    font-size: 1.4em;
+    margin-bottom: .5em;
+}
+
+.report-counter__list {
+    list-style: none;
+    padding: 0;
+}
+
+.report-counter__list-item {
+    color: hsl(var(--hue),100%,20%);
+}

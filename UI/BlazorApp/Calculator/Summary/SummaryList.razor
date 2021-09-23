@@ -3,30 +3,30 @@
 
 <div class="summary-list__wrapper">
 
-    <div class="summary-list__list-wrapper">
-        <table>
+    <h3>Summary</h3>
 
-            <thead>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
+    <table>
 
-            <tbody>
-                @foreach (var item in argItems)
-                {
-                    <SummaryRowArgument Item="@item" />
-                }
-                @foreach (var item in resultItems)
-                {
-                    <SummaryRowResult Item="@item" />
-                }
-            </tbody>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Expresion</th>
+                <th>Style</th>
+            </tr>
+        </thead>
 
-        </table>
-    </div>
+        <tbody>
+            @foreach (var item in argItems)
+            {
+                <SummaryRowArgument Item="@item" />
+            }
+            @foreach (var item in resultItems)
+            {
+                <SummaryRowResult Item="@item" />
+            }
+        </tbody>
+
+    </table>
 
 </div>
 

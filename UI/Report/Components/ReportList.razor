@@ -1,0 +1,52 @@
+﻿@inject IEventSubscriber subscriber
+@inject IEventParser parser
+@implements IDisposable
+
+<div class="report-list__wrapper">
+
+    <table>
+
+        <thead>
+            <tr>
+                <th class="report-list__header--time">Time</th>
+                <th>Event</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in items.OrderByDescending(r=>r.Time))
+            {
+                <tr>
+                    <td class="report-list__item--time">@item.Time</td>
+                    <td>@item.Description</td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+</div>
+
+@code {
+    List<ReportLogModel> items = new List<ReportLogModel>();
+
+    protected override void OnInitialized()
+    {
+        subscriber.SubscribeAll(ComponentBusEventHandler);
+    }
+    void IDisposable.Dispose()
+    {
+        subscriber.UnsubscribeAll(ComponentBusEventHandler);
+    }
+
+    void ComponentBusEventHandler(IComponentEvent @event)
+    {
+        var item = parser.EventToReportLog(@event);
+
+        if (item is null)
+            return;
+
+        items.Add(item);
+        StateHasChanged();
+    }
+}

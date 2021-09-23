@@ -1,13 +1,20 @@
 ﻿@inject ComponentEventBus bus
+@implements IDisposable
 
 <div class="shop-card__wrapper">
 
     <div class="shop-card__image">
-
+        <ShopItemImage Category="@Item.Category" Color="@Item.Color" />
     </div>
 
     <div class="shop-card__id">
         #@Item.Id
+    </div>
+
+    <div class="shop-card__info" title="@Item.Description">
+        <div>
+            i
+        </div>
     </div>
 
     <div class="shop-card__name">
@@ -30,8 +37,29 @@
 @code {
     [Parameter] public ShopModel Item { get; set; }
 
+    protected override void OnInitialized()
+    {
+        bus.Subscribe<CatalogChangedEvent>(CatalogChangedHandler);
+    }
+    void IDisposable.Dispose()
+    {
+        bus.Unsubscribe(CatalogChangedHandler);
+    }
 
     async Task Buy() => await bus.Publish<ShopSoldEvent>(new ShopSoldEvent(Item.Id));
 
+    void CatalogChangedHandler(IComponentEvent @event)
+    {
+        var msg = @event as CatalogChangedEvent;
 
+        if (msg.Id != Item.Id)
+            return;
+
+        Item.Name = msg.Name;
+        Item.Category = msg.Category;
+        Item.Color = msg.Color;
+        Item.Description = msg.Description;
+
+        StateHasChanged();
+    }
 }

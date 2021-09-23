@@ -17,12 +17,5 @@ namespace Shop
         public int Quantity { get; set; }
 
         public bool Available => ForSale && Quantity > 0;
-
-        public ShopModel(int id, string name)
-        {
-            Id = id;
-            Name = name;
-            Price = 100;
-        }
     }
 }

@@ -3,7 +3,9 @@
 
 <div class="result-add__wrapper">
 
-    <label>
+    <h4 class="result-add__header">Add new</h4>
+
+    <label class="result-add__label--operation">
         Operation:
         <select @bind="operationId">
             @foreach (var o in operations)
@@ -13,29 +15,37 @@
         </select>
     </label>
 
-    Parameters:
+    <div class="result-add__label--args">
+        Arguments:
 
-    @if (showParameters)
-    {
-        <div>
-            <button @onclick="ShowParametersChange">OK</button>
+        @if (showParameters)
+        {
+            <div class="result-add__args">
+                <h5>
+                    Select args:
+                </h5>
 
-            @foreach (var p in parameters)
-            {
-                <label>
-                    <input type="checkbox" checked="@IsSelectedParameter(p.Id)" value="@p.Id" @onclick="() => SelectedParameterChange(p.Id)" />
-                    @p.Name
-                </label>
-            }
+                <div class="result-add__args-list">
+                    @foreach (var p in parameters)
+                    {
+                        <label>
+                            <input type="checkbox" checked="@IsSelectedParameter(p.Id)" value="@p.Id" @onclick="() => SelectedParameterChange(p.Id)" />
+                            @p.Name
+                        </label>
+                    }
+                </div>
 
-        </div>
-    }
-    else
-    {
-        <button @onclick="ShowParametersChange">Set</button>
-    }
+                <button class="result-add__button--ok" @onclick="ShowParametersChange">OK</button>
 
-    <button @onclick="Add" disabled="@(!selectedParameters.Any())">
+            </div>
+        }
+        else
+        {
+            <button class="result-add__button--args" @onclick="ShowParametersChange">...</button>
+        }
+    </div>
+
+    <button class="result-add__button--add" @onclick="Add" disabled="@(!selectedParameters.Any())">
         <span class="oi oi-plus"></span>
         Add
     </button>
@@ -59,11 +69,13 @@
             .ToDictionary(k => (int)k, v => v.GetDescription());
 
         bus.Subscribe<ArgumentAddEvent>(ArgumentAddHandler);
+        bus.Subscribe<ArgumentRemoveEvent>(ArgumentRemoveHandler);
         bus.Subscribe<ArgumentValueChangeEvent>(ArgumentValueChangeHandler);
     }
     void IDisposable.Dispose()
     {
         bus.Unsubscribe(ArgumentAddHandler);
+        bus.Unsubscribe(ArgumentRemoveHandler);
         bus.Unsubscribe(ArgumentValueChangeHandler);
     }
 
@@ -72,6 +84,21 @@
         var msg = @event as ArgumentAddEvent;
         parameters.Add(new() { Id = msg.Id, Name = msg.Name });
         selectedParameters.Add(msg.Id);
+        StateHasChanged();
+    }
+
+    void ArgumentRemoveHandler(IComponentEvent @event)
+    {
+        var msg = @event as ArgumentRemoveEvent;
+
+        var parameter = parameters.FirstOrDefault(r => r.Id == msg.Id);
+        if (parameter is null)
+            return;
+        parameters.Remove(parameter);
+
+        if (selectedParameters.Any(r => r == msg.Id))
+            selectedParameters.Remove(msg.Id);
+
         StateHasChanged();
     }
 

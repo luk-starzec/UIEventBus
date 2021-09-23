@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "UI\Common\Common.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Product", "Product", "{83132764-0D2D-469E-A907-5407340BF1CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Report", "UI\Report\Report.csproj", "{E4EDEE4D-26EA-493D-8E39-9D34D0E663A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Report", "UI\Report\Report.csproj", "{E4EDEE4D-26EA-493D-8E39-9D34D0E663A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

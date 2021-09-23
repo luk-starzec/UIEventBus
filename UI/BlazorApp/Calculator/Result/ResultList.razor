@@ -5,18 +5,18 @@
 
     <h3>Results</h3>
 
-    <ul class="result-list__list">
+    <div class="result-list__items">
         @foreach (var item in items)
         {
             <ResultItem Model="@item" />
         }
-    </ul>
+    </div>
 
     <div class="result-list__add-wrapper">
         <ResultAdd />
     </div>
 
-    <button class="result-list__reset-style">
+    <button class="result-list__reset-style" @onclick="ResetStyle">
         Reset styles
     </button>
 
