@@ -45,7 +45,7 @@
 .argument-list__reset-style,
 .result-list__reset-style {
     grid-area: reset;
-    width: fit-content;
+    width: 10em;
     margin-top: 1em;
     border: none;
     border-radius: 0 .5em 0 .5em;
