@@ -4,6 +4,11 @@ using System.Threading.Tasks;
 
 namespace Catalog
 {
+    public interface ICatalogService
+    {
+        Task<CatalogModel[]> GetItemsAsync();
+    }
+
     public class CatalogService : ICatalogService
     {
         private readonly HttpClient httpClient;

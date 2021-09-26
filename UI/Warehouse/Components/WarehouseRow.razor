@@ -39,6 +39,7 @@
     protected override void OnInitialized()
     {
         bus.Subscribe<ShopSoldEvent>(ShopSoldHandler);
+        bus.Subscribe<CatalogChangedEvent>(CatalogChangedHandler);
     }
 
     void IDisposable.Dispose()
@@ -65,6 +66,17 @@
             return;
 
         await Decrease();
+        StateHasChanged();
+    }
+
+    void CatalogChangedHandler(IComponentEvent @event)
+    {
+        var msg = @event as CatalogChangedEvent;
+
+        if (msg.Id != Item.Id)
+            return;
+
+        Item.Name = msg.Name;
         StateHasChanged();
     }
 

@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace Shop
 {
+    public interface IShopService
+    {
+        Task<ShopModel[]> GetItemsAsync();
+    }
+
     public class ShopService : IShopService
     {
         private readonly HttpClient httpClient;

@@ -12,6 +12,10 @@
     }
     else
     {
+        <button class="catalog__add-button" @onclick="Add" title="Add product">
+            <span class="oi oi-plus"></span>
+        </button>
+
         <div class="catalog__table-wrapper">
 
             <table class="catalog__table">
@@ -37,11 +41,22 @@
 @code {
     List<CatalogModel> items;
 
+    CatalogNewItem newItem = null;
+
     protected override async Task OnInitializedAsync()
     {
         items = (await service.GetItemsAsync()).ToList();
 
         bus.Subscribe<CatalogDeleteEndEvent>(CatalogDeleteEndHandler);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (newItem is not null)
+        {
+            await bus.Publish<CatalogAddedEvent>(new(newItem));
+            newItem = null;
+        }
     }
 
     void IDisposable.Dispose()
@@ -61,5 +76,21 @@
         StateHasChanged();
 
         await bus.Publish(new CatalogRemovedEvent(e.Id));
+    }
+
+    void Add()
+    {
+        var id = items.Select(r => r.Id).Max() + 1;
+        var item = new CatalogModel
+        {
+            Id = id,
+            Name = $"Product #{id}",
+            Category = CatalogCategoryEnum.TShirt,
+            Color = "#FFFFFF",
+            Description = "Lorem ipsum",
+        };
+        items.Add(item);
+        newItem = new CatalogNewItem(item.Id, item.Name, item.Category.GetDescription(), item.Color, item.Description);
+        StateHasChanged();
     }
 }

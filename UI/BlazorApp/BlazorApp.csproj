@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ComponentBus\ComponentBus.csproj" />
+    <ProjectReference Include="..\..\Bus\ComponentBus\ComponentBus.csproj" />
     <ProjectReference Include="..\Report\Report.csproj" />
     <ProjectReference Include="..\Catalog.Contract\Catalog.Contract.csproj" />
     <ProjectReference Include="..\Catalog\Catalog.csproj" />

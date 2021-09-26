@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.Serialization;
+﻿using System.ComponentModel;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Catalog
 {
@@ -18,13 +12,6 @@ namespace Catalog
         public CatalogCategoryEnum Category { get; set; }
         public string Color { get; set; }
         public bool ForSale { get; set; }
-
-        //public CatalogModel(int id, string name)
-        //{
-        //    Id = id;
-        //    Name = name;
-        //    ForSale = true;
-        //}
     }
 
     public enum CatalogCategoryEnum

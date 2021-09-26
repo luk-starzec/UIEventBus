@@ -29,36 +29,21 @@
 @code {
     List<ShopModel> items;
 
+    Random rnd;
     protected override async Task OnInitializedAsync()
     {
+        rnd = new Random();
+
         items = (await service.GetItemsAsync()).ToList();
 
-        bus.Subscribe<CatalogForSaleChangedEvent>(CatalogForSaleChangedHandler);
-        bus.Subscribe<WarehouseQuantityChangedEvent>(WarehouseQuantityChangedHandler);
         bus.Subscribe<CatalogAddedEvent>(CatalogAddedHandler);
         bus.Subscribe<CatalogRemovedEvent>(CatalogRemovedHandler);
     }
 
     void IDisposable.Dispose()
     {
-        bus.Unsubscribe(CatalogForSaleChangedHandler);
-        bus.Unsubscribe(WarehouseQuantityChangedHandler);
         bus.Unsubscribe(CatalogAddedHandler);
         bus.Unsubscribe(CatalogRemovedHandler);
-    }
-
-    void CatalogForSaleChangedHandler(IComponentEvent @event)
-    {
-        var item = @event as CatalogForSaleChangedEvent;
-
-        SetForSale(item.Id, item.ForSale);
-    }
-
-    void WarehouseQuantityChangedHandler(IComponentEvent @event)
-    {
-        var item = @event as WarehouseQuantityChangedEvent;
-
-        SetQuantity(item.Id, item.Quantity);
     }
 
     void CatalogRemovedHandler(IComponentEvent @event)
@@ -84,27 +69,9 @@
             Category = msg.Item.Category,
             Color = msg.Item.Color,
             Description = msg.Item.Description,
+            Price = rnd.Next(5, 40)
         };
         items.Add(item);
-    }
-
-    void SetForSale(int id, bool forSale)
-    {
-        var item = items.FirstOrDefault(r => r.Id == id);
-        if (item is null)
-            return;
-
-        item.ForSale = forSale;
-        StateHasChanged();
-    }
-
-    void SetQuantity(int id, int quantity)
-    {
-        var item = items.FirstOrDefault(r => r.Id == id);
-        if (item is null)
-            return;
-
-        item.Quantity = quantity;
         StateHasChanged();
     }
 }

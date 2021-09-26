@@ -4,6 +4,11 @@ using System.Threading.Tasks;
 
 namespace Warehouse
 {
+    public interface IWarehouseService
+    {
+        Task<WarehouseModel[]> GetItemsAsync();
+    }
+
     public class WarehouseService : IWarehouseService
     {
         private readonly HttpClient httpClient;

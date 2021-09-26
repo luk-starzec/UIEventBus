@@ -1,15 +1,18 @@
 ﻿using Catalog.Events;
-using Warehouse.Events;
-using Shop.Events;
 using ComponentBus;
+using Shop.Events;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Warehouse.Events;
 
 namespace Report
 {
+    public interface IEventSubscriber
+    {
+        void SubscribeAll(Action<IComponentEvent> handler);
+        void UnsubscribeAll(Action<IComponentEvent> handler);
+    }
+
+
     public class EventSubscriber : IEventSubscriber
     {
         private readonly ComponentEventBus bus;

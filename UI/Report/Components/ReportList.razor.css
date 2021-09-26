@@ -1,6 +1,8 @@
 ﻿.report-list__wrapper {
     position: relative;
     overflow: auto;
+    scrollbar-color: hsl(var(--hue),60%,70%) hsl(var(--hue),100%,98%);
+    scrollbar-width: thin;
 }
 
     .report-list__wrapper::-webkit-scrollbar {

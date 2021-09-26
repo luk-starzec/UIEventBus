@@ -1,7 +1,8 @@
 ﻿@inject ComponentEventBus bus
+@inject JsHelper jsHelper
 @implements IDisposable
 
-<tr class="@cssRow">
+<tr class="@cssRow" id="@rowId">
     @if (editVisible)
     {
         <CatalogItemEdit Item="@Item" />
@@ -23,6 +24,7 @@
 
     bool editVisible = false;
     bool deleteVisible = false;
+    string rowId => $"row{Item.Id}";
 
     string cssRow => editVisible
         ? "catalog-row__row--edit"
@@ -34,6 +36,8 @@
         bus.Subscribe<CatalogEditEndEvent>(CatalogEditEndHandler);
         bus.Subscribe<CatalogDeleteBeginEvent>(CatalogDeleteBeginHandler);
         bus.Subscribe<CatalogDeleteEndEvent>(CatalogDeleteEndHandler);
+        bus.Subscribe<CatalogAddedEvent>(CatalogAddedHandler);
+        bus.Subscribe<CatalogForSaleChangedEvent>(CatalogForSaleChangedHandler);
     }
 
 
@@ -43,6 +47,8 @@
         bus.Unsubscribe(CatalogEditEndHandler);
         bus.Unsubscribe(CatalogDeleteBeginHandler);
         bus.Unsubscribe(CatalogDeleteEndHandler);
+        bus.Unsubscribe(CatalogAddedHandler);
+        bus.Unsubscribe(CatalogForSaleChangedHandler);
     }
 
     void CatalogEditBeginHandler(IComponentEvent @event)
@@ -77,6 +83,27 @@
         SetDeleteVisible(false);
     }
 
+    async Task CatalogAddedHandler(IComponentEvent @event)
+    {
+        var msg = @event as CatalogAddedEvent;
+        if (msg.Item.Id != Item.Id)
+        {
+            SetEditVisible(false);
+            SetDeleteVisible(false);
+            return;
+        }
+
+        SetEditVisible(true);
+        await jsHelper.ScrollIntoView(rowId);
+    }
+
+    void CatalogForSaleChangedHandler(IComponentEvent @event)
+    {
+        var msg = @event as CatalogForSaleChangedEvent;
+
+        if (msg.Id == Item.Id)
+            Item.ForSale = msg.ForSale;
+    }
 
     void SetEditVisible(bool visible)
     {

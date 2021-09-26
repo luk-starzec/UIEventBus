@@ -23,6 +23,8 @@ h3 {
     flex-wrap: wrap;
     gap: 1em;
     padding: 0 .5em;
+    scrollbar-color: hsla(var(--hue),60%,70%,0.8) hsla(var(--hue),100%,98%,0.3);
+    scrollbar-width: thin;
 }
 
     .shop__items-list::-webkit-scrollbar {
@@ -35,7 +37,7 @@ h3 {
     }
 
     .shop__items-list::-webkit-scrollbar-thumb {
-        background-color: hsl(var(--hue),60%,70%);
+        background-color: hsla(var(--hue),60%,70%,0.8);
         border-radius: .25em;
     }
 

@@ -3,18 +3,42 @@
     background-color: hsl(var(--hue),100%,95%);
     padding: 1em;
     height: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        "header add"
+        "table table"
 }
 
 h3 {
+    grid-area: header;
     text-align: center;
     color: hsl(var(--hue),100%,30%);
     margin-bottom: .5em;
 }
 
+.catalog__add-button {
+    grid-area: add;
+    width: 2em;
+    height: 2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: .5em;
+    border: 1px solid hsl(var(--hue),100%,30%);
+    border-radius: .5em;
+    background-color: hsl(var(--hue),100%,90%);
+    color: hsl(var(--hue),100%,30%);
+}
+
 .catalog__table-wrapper {
+    grid-area: table;
     position: relative;
-    height: calc(100% - 3em);
+    height: 100%;
     overflow: auto;
+    scrollbar-color: hsl(var(--hue),60%,70%) hsl(var(--hue),100%,98%);
+    scrollbar-width: thin;
 }
 
     .catalog__table-wrapper::-webkit-scrollbar {

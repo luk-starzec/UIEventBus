@@ -71,8 +71,13 @@
     void CatalogAddedHandler(IComponentEvent @event)
     {
         var msg = @event as CatalogAddedEvent;
-
-        items.Add(new(msg.Item.Id, msg.Item.Name));
+        var item = new WarehouseModel
+        {
+            Id = msg.Item.Id,
+            Name = msg.Item.Name,
+        };
+        items.Add(item);
+        StateHasChanged();
     }
 
 }

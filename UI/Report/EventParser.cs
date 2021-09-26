@@ -1,12 +1,17 @@
 ﻿using Common;
 using ComponentBus;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Report
 {
+    public interface IEventParser
+    {
+        ReportLogModel EventToReportLog(IComponentEvent @event);
+        string GetEventSource(IComponentEvent @event);
+    }
+
+
     public class EventParser : IEventParser
     {
         List<string> eventSources = new()

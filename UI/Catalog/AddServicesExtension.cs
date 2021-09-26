@@ -7,6 +7,7 @@ namespace Catalog
         public static IServiceCollection AddCatalogServices(this IServiceCollection services)
         {
             services.AddTransient<ICatalogService, CatalogService>();
+            services.AddScoped<JsHelper>();
             return services;
         }
     }

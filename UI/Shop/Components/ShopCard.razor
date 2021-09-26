@@ -40,10 +40,15 @@
     protected override void OnInitialized()
     {
         bus.Subscribe<CatalogChangedEvent>(CatalogChangedHandler);
+        bus.Subscribe<CatalogForSaleChangedEvent>(CatalogForSaleChangedHandler);
+        bus.Subscribe<WarehouseQuantityChangedEvent>(WarehouseQuantityChangedHandler);
+
     }
     void IDisposable.Dispose()
     {
         bus.Unsubscribe(CatalogChangedHandler);
+        bus.Unsubscribe(CatalogForSaleChangedHandler);
+        bus.Unsubscribe(WarehouseQuantityChangedHandler);
     }
 
     async Task Buy() => await bus.Publish<ShopSoldEvent>(new ShopSoldEvent(Item.Id));
@@ -62,4 +67,25 @@
 
         StateHasChanged();
     }
+
+    void CatalogForSaleChangedHandler(IComponentEvent @event)
+    {
+        var msg = @event as CatalogForSaleChangedEvent;
+        if (msg.Id != Item.Id)
+            return;
+
+        Item.ForSale = msg.ForSale;
+        StateHasChanged();
+    }
+
+    void WarehouseQuantityChangedHandler(IComponentEvent @event)
+    {
+        var msg = @event as WarehouseQuantityChangedEvent;
+        if (msg.Id != Item.Id)
+            return;
+
+        Item.Quantity = msg.Quantity;
+        StateHasChanged();
+    }
+
 }
