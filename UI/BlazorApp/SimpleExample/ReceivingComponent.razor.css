@@ -1,0 +1,5 @@
+﻿ul {
+    margin-top: 1em;
+    overflow: auto;
+    max-height: calc(100% - 6em);
+}

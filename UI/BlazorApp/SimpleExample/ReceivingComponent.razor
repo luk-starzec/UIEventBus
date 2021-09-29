@@ -1,0 +1,32 @@
+﻿@inject ComponentEventBus bus
+@implements IDisposable
+
+<ul>
+    @foreach (var item in items)
+    {
+        <li>
+            @item
+        </li>
+    }
+</ul>
+
+@code {
+    List<string> items = new List<string>();
+
+    protected override void OnInitialized()
+    {
+        bus.Subscribe<SimpleEvent>(SimpleEventHandler);
+    }
+    void IDisposable.Dispose()
+    {
+        bus.Unsubscribe(SimpleEventHandler);
+    }
+
+    void SimpleEventHandler(IComponentEvent @event)
+    {
+        var msg = @event as SimpleEvent;
+        items.Add($"{DateTime.Now} - Component #{msg.Id} says: {msg.Text}");
+        StateHasChanged();
+    }
+
+}

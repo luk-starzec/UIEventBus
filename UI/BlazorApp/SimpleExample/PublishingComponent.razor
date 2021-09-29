@@ -1,0 +1,15 @@
+﻿@inject ComponentEventBus bus
+
+<div>
+    <span>#@Id</span>
+    <input @bind-value="text" />
+    <button @onclick="OnClick">Click me</button>
+</div>
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    string text = "Hello";
+
+    async Task OnClick() => await bus.Publish(new SimpleEvent(Id, text));
+}
