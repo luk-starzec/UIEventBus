@@ -11,5 +11,5 @@
 
     string text = "Hello";
 
-    async Task OnClick() => await bus.Publish(new SimpleEvent(Id, text));
+    async Task OnClick() => await bus.Publish(new BasicEvent(Id, text));
 }

@@ -15,7 +15,7 @@
 
     protected override void OnInitialized()
     {
-        bus.Subscribe<SimpleEvent>(SimpleEventHandler);
+        bus.Subscribe<BasicEvent>(SimpleEventHandler);
     }
     void IDisposable.Dispose()
     {
@@ -24,7 +24,7 @@
 
     void SimpleEventHandler(IComponentEvent @event)
     {
-        var msg = @event as SimpleEvent;
+        var msg = @event as BasicEvent;
         items.Add($"{DateTime.Now} - Component #{msg.Id} says: {msg.Text}");
         StateHasChanged();
     }
