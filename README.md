@@ -1,5 +1,5 @@
 # Component Event Bus
-
+[![.NET](https://github.com/luk-starzec/UIEventBus/actions/workflows/dotnet.yml/badge.svg)](https://github.com/luk-starzec/UIEventBus/actions/workflows/dotnet.yml)
 ## Basic config
 Add ComponentEventBus to project DI
 
@@ -8,7 +8,7 @@ Event can be any class implementing interface IComponentEvent. This interface is
 
 If you want to pass any payload in event, define additional fields in class.
 
-### For example:
+#### For example:
 Event with Id as payload
 
     public class TestEvent : IComponentEvent
